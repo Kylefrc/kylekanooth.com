@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Projects from '../components/Projects.astro';
+import BlogPreview from '../components/BlogPreview.astro';
+import Services from '../components/Services.astro';
+import Testimonials from '../components/Testimonials.astro';
+import SocialStats from '../components/SocialStats.astro';
+import TrustBadges from '../components/TrustBadges.astro';
+import Skills from '../components/Skills.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Kyle Kanooth — Builder, Energy Consultant, Automator"
+  description="Kyle Kanooth builds at the intersection of energy, AI, and automation. Energy efficiency consultant by day, builder by night. Portland, OR."
+>
+  <Nav />
+
+  <!-- Social proof bar -->
+  <div class="social-proof-bar bg-surface/80 backdrop-blur border-b border-border">
+    <div class="max-w-6xl mx-auto px-5 md:px-8 py-2.5 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-xs text-textMut">
+      <span class="inline-flex items-center gap-1.5">
+        <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" class="w-3.5 h-3.5 text-cyan">
+          <path d="M8 1l2 4.5H15l-3.5 3 1.5 5L8 10.5 3 13.5l1.5-5L1 5.5h5z" fill="currentColor"/>
+        </svg>
+        Serving Portland &amp; Vancouver homeowners since 2022
+      </span>
+      <span class="hidden sm:inline text-border" aria-hidden="true">|</span>
+      <span class="inline-flex items-center gap-1.5">
+        <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" class="w-3.5 h-3.5 text-cyan">
+          <path d="M2 8.5l4.5 4.5L14 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        150+ homes upgraded
+      </span>
+      <span class="hidden sm:inline text-border" aria-hidden="true">|</span>
+      <span class="inline-flex items-center gap-1.5">
+        <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" class="w-3.5 h-3.5 text-cyan">
+          <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Energy Trust of Oregon partner
+      </span>
+    </div>
+  </div>
+
+  <main id="main-content">
+    <Hero />
+    <About />
+    <Projects />
+    <BlogPreview />
+    <Services />
+    <Testimonials />
+    <SocialStats />
+    <TrustBadges />
+    <Skills />
+    <Contact />
+  </main>
+
+  <Footer />
+
+  <!-- JSON-LD Person schema -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Kyle Kanooth",
+    "jobTitle": "Energy Efficiency Consultant and Software Builder",
+    "url": "https://kylekanooth.com/",
+    "email": "kyle.kanooth@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Portland",
+      "addressRegion": "OR",
+      "addressCountry": "US"
+    },
+    "sameAs": [
+      "https://linkedin.com/in/kyle-kanooth",
+      "https://github.com/kylekanooth"
+    ],
+    "knowsAbout": [
+      "Energy Efficiency", "AI Automation", "Software Development",
+      "Python", "TypeScript", "React", "FastAPI", "Technical Recruiting"
+    ]
+  })} />
+</BaseLayout>

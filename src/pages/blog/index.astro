@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+}
+---
+
+<BaseLayout
+  title="Blog — Kyle Kanooth"
+  description="Writing on automation, field service operations, and building software for the trades."
+>
+  <main id="main-content" class="min-h-screen bg-bg text-textPri">
+    <!-- Nav -->
+    <nav class="sticky top-0 z-50 border-b border-border bg-[var(--c-nav-bg)] backdrop-blur-md">
+      <div class="max-w-5xl mx-auto px-6 h-14 flex items-center gap-6">
+        <a href="/" class="font-display font-semibold text-textPri nav-link text-sm">Kyle Kanooth</a>
+        <span class="text-border" aria-hidden="true">/</span>
+        <span class="text-textMut text-sm">Blog</span>
+        <div class="ml-auto flex items-center gap-4">
+          <a href="/#contact" class="text-textSec text-sm nav-link hover:text-textPri transition-colors">Contact</a>
+          <button
+            data-theme-toggle
+            class="theme-toggle"
+            aria-label="Toggle color theme"
+          >
+            <svg class="w-4 h-4 block dark-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="max-w-5xl mx-auto px-6 pt-16 pb-10">
+      <p class="text-cyan text-sm font-medium uppercase tracking-widest mb-3">Writing</p>
+      <h1 class="font-display text-4xl md:text-5xl font-bold text-textPri leading-tight mb-4">
+        Blog
+      </h1>
+      <p class="text-textSec text-lg max-w-2xl leading-relaxed">
+        Notes on building automation for the trades, lessons from running an HVAC business, and the software I build along the way.
+      </p>
+    </header>
+
+    <!-- Post grid -->
+    <section class="max-w-5xl mx-auto px-6 pb-24">
+      {posts.length === 0 ? (
+        <p class="text-textMut text-sm">No posts yet. Check back soon.</p>
+      ) : (
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {posts.map((post, i) => (
+            <article class={`card-hover bg-surface border border-border rounded-2xl overflow-hidden flex flex-col reveal`} data-delay={String((i % 4) + 1)}>
+              <a href={`/blog/${post.slug}`} class="flex flex-col flex-1 p-6 group" aria-label={`Read: ${post.data.title}`}>
+                <!-- Meta row -->
+                <div class="flex items-center gap-3 mb-3">
+                  <time datetime={post.data.date.toISOString()} class="text-textMut text-xs font-medium uppercase tracking-widest">
+                    {formatDate(post.data.date)}
+                  </time>
+                  <span class="w-1 h-1 rounded-full bg-border" aria-hidden="true"></span>
+                  <span class="text-textMut text-xs">{post.data.readTime}</span>
+                </div>
+
+                <!-- Title -->
+                <h2 class="font-display text-lg font-semibold text-textPri leading-snug mb-3 group-hover:text-cyan transition-colors">
+                  {post.data.title}
+                </h2>
+
+                <!-- Description -->
+                <p class="text-textSec text-sm leading-relaxed flex-1">
+                  {post.data.description}
+                </p>
+
+                <!-- Tags -->
+                {post.data.tags && post.data.tags.length > 0 && (
+                  <div class="flex flex-wrap gap-1.5 mt-4">
+                    {post.data.tags.slice(0, 3).map((tag) => (
+                      <span class="tag text-xs px-2.5 py-1">{tag}</span>
+                    ))}
+                  </div>
+                )}
+
+                <!-- Read more -->
+                <div class="mt-5 flex items-center gap-1 text-cyan text-sm font-medium">
+                  Read more
+                  <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                  </svg>
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-border">
+      <div class="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-textMut text-sm">&copy; {new Date().getFullYear()} Kyle Kanooth. All rights reserved.</p>
+        <a href="/" class="text-textSec text-sm hover:text-textPri transition-colors nav-link">
+          &larr; Back to home
+        </a>
+      </div>
+    </footer>
+  </main>
+</BaseLayout>

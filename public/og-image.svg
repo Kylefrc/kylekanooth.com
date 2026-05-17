@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <!-- Background dot grid pattern -->
+    <pattern id="dots" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="rgba(255,255,255,0.06)"/>
+    </pattern>
+
+    <!-- Primary glow (top-left) -->
+    <radialGradient id="glowTL" cx="25%" cy="40%" r="55%" fx="25%" fy="40%">
+      <stop offset="0%"  stop-color="#22d3ee" stop-opacity="0.14"/>
+      <stop offset="45%" stop-color="#22d3ee" stop-opacity="0.04"/>
+      <stop offset="70%" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Secondary glow (bottom-right) -->
+    <radialGradient id="glowBR" cx="80%" cy="80%" r="50%" fx="80%" fy="80%">
+      <stop offset="0%"  stop-color="#06b6d4" stop-opacity="0.10"/>
+      <stop offset="65%" stop-color="#06b6d4" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Top accent line gradient -->
+    <linearGradient id="accentLine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#22d3ee" stop-opacity="0"/>
+      <stop offset="20%"  stop-color="#22d3ee" stop-opacity="1"/>
+      <stop offset="50%"  stop-color="#06b6d4" stop-opacity="1"/>
+      <stop offset="80%"  stop-color="#22d3ee" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- URL pill gradient -->
+    <linearGradient id="pillBg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#22d3ee" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.06"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Base background -->
+  <rect width="1200" height="630" fill="#0a0a0a"/>
+
+  <!-- Dot grid -->
+  <rect width="1200" height="630" fill="url(#dots)"/>
+
+  <!-- Glows -->
+  <rect width="1200" height="630" fill="url(#glowTL)"/>
+  <rect width="1200" height="630" fill="url(#glowBR)"/>
+
+  <!-- Top accent line -->
+  <rect x="0" y="0" width="1200" height="3" fill="url(#accentLine)"/>
+
+  <!-- ── Decorative dot matrix (right side, 8×6) ── -->
+  <g opacity="0.18" transform="translate(1080, 255)">
+    <!-- Row 1 -->
+    <circle cx="0"  cy="0"  r="3" fill="#22d3ee"/>
+    <circle cx="18" cy="0"  r="3" fill="#404040"/>
+    <circle cx="36" cy="0"  r="3" fill="#22d3ee"/>
+    <circle cx="54" cy="0"  r="3" fill="#404040"/>
+    <circle cx="72" cy="0"  r="3" fill="#22d3ee"/>
+    <circle cx="90" cy="0"  r="3" fill="#404040"/>
+    <!-- Row 2 -->
+    <circle cx="0"  cy="18" r="3" fill="#404040"/>
+    <circle cx="18" cy="18" r="3" fill="#22d3ee"/>
+    <circle cx="36" cy="18" r="3" fill="#404040"/>
+    <circle cx="54" cy="18" r="3" fill="#22d3ee"/>
+    <circle cx="72" cy="18" r="3" fill="#404040"/>
+    <circle cx="90" cy="18" r="3" fill="#22d3ee"/>
+    <!-- Row 3 -->
+    <circle cx="0"  cy="36" r="3" fill="#22d3ee"/>
+    <circle cx="18" cy="36" r="3" fill="#404040"/>
+    <circle cx="36" cy="36" r="3" fill="#22d3ee"/>
+    <circle cx="54" cy="36" r="3" fill="#404040"/>
+    <circle cx="72" cy="36" r="3" fill="#22d3ee"/>
+    <circle cx="90" cy="36" r="3" fill="#404040"/>
+    <!-- Row 4 -->
+    <circle cx="0"  cy="54" r="3" fill="#404040"/>
+    <circle cx="18" cy="54" r="3" fill="#22d3ee"/>
+    <circle cx="36" cy="54" r="3" fill="#404040"/>
+    <circle cx="54" cy="54" r="3" fill="#22d3ee"/>
+    <circle cx="72" cy="54" r="3" fill="#404040"/>
+    <circle cx="90" cy="54" r="3" fill="#22d3ee"/>
+    <!-- Row 5 -->
+    <circle cx="0"  cy="72" r="3" fill="#22d3ee"/>
+    <circle cx="18" cy="72" r="3" fill="#404040"/>
+    <circle cx="36" cy="72" r="3" fill="#22d3ee"/>
+    <circle cx="54" cy="72" r="3" fill="#404040"/>
+    <circle cx="72" cy="72" r="3" fill="#22d3ee"/>
+    <circle cx="90" cy="72" r="3" fill="#404040"/>
+    <!-- Row 6 -->
+    <circle cx="0"  cy="90" r="3" fill="#404040"/>
+    <circle cx="18" cy="90" r="3" fill="#22d3ee"/>
+    <circle cx="36" cy="90" r="3" fill="#404040"/>
+    <circle cx="54" cy="90" r="3" fill="#22d3ee"/>
+    <circle cx="72" cy="90" r="3" fill="#404040"/>
+    <circle cx="90" cy="90" r="3" fill="#22d3ee"/>
+    <!-- Row 7 -->
+    <circle cx="0"  cy="108" r="3" fill="#22d3ee"/>
+    <circle cx="18" cy="108" r="3" fill="#404040"/>
+    <circle cx="36" cy="108" r="3" fill="#22d3ee"/>
+    <circle cx="54" cy="108" r="3" fill="#404040"/>
+    <circle cx="72" cy="108" r="3" fill="#22d3ee"/>
+    <circle cx="90" cy="108" r="3" fill="#404040"/>
+    <!-- Row 8 -->
+    <circle cx="0"  cy="126" r="3" fill="#404040"/>
+    <circle cx="18" cy="126" r="3" fill="#22d3ee"/>
+    <circle cx="36" cy="126" r="3" fill="#404040"/>
+    <circle cx="54" cy="126" r="3" fill="#22d3ee"/>
+    <circle cx="72" cy="126" r="3" fill="#404040"/>
+    <circle cx="90" cy="126" r="3" fill="#22d3ee"/>
+  </g>
+
+  <!-- ── Monogram badge ── -->
+  <!-- Badge box -->
+  <rect x="96" y="164" width="52" height="52" rx="10" fill="#141414" stroke="#262626" stroke-width="1.5"/>
+  <!-- "K" letter -->
+  <text x="122" y="200" font-family="'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif"
+        font-size="26" font-weight="700" text-anchor="middle" fill="#22d3ee">K</text>
+  <!-- "Portfolio" label -->
+  <text x="162" y="197" font-family="'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif"
+        font-size="13" font-weight="500" letter-spacing="2" text-anchor="start" fill="#7a8a9d"
+        text-decoration="none" style="text-transform:uppercase">PORTFOLIO</text>
+
+  <!-- ── Name heading ── -->
+  <!-- "Kyle " in light -->
+  <text x="96" y="320" font-family="'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif"
+        font-size="86" font-weight="700" letter-spacing="-3" fill="#f8fafc">Kyle </text>
+  <!-- Measure "Kyle " width at 86px with -3 letter-spacing ≈ 248px -->
+  <!-- "Kanooth" in cyan -->
+  <text x="344" y="320" font-family="'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif"
+        font-size="86" font-weight="700" letter-spacing="-3" fill="#22d3ee">Kanooth</text>
+
+  <!-- ── Tagline ── -->
+  <!-- "AI Automation" -->
+  <text x="96" y="370" font-family="'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif"
+        font-size="26" font-weight="400" fill="#cbd5e1">AI Automation</text>
+  <!-- dot separator -->
+  <text x="310" y="370" font-family="'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif"
+        font-size="26" font-weight="400" fill="#22d3ee" opacity="0.7"> • </text>
+  <!-- "Energy Efficiency" -->
+  <text x="347" y="370" font-family="'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif"
+        font-size="26" font-weight="400" fill="#cbd5e1">Energy Efficiency</text>
+  <!-- dot separator -->
+  <text x="614" y="370" font-family="'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif"
+        font-size="26" font-weight="400" fill="#22d3ee" opacity="0.7"> • </text>
+  <!-- "Software" -->
+  <text x="652" y="370" font-family="'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif"
+        font-size="26" font-weight="400" fill="#cbd5e1">Software</text>
+
+  <!-- ── URL pill ── -->
+  <rect x="96" y="408" width="248" height="44" rx="22" fill="url(#pillBg)" stroke="#22d3ee" stroke-opacity="0.25" stroke-width="1"/>
+  <!-- Globe icon (simplified) -->
+  <circle cx="122" cy="430" r="9" fill="none" stroke="#22d3ee" stroke-width="1.5"/>
+  <ellipse cx="122" cy="430" rx="5.5" ry="9" fill="none" stroke="#22d3ee" stroke-width="1.5"/>
+  <line x1="113" y1="430" x2="131" y2="430" stroke="#22d3ee" stroke-width="1.5"/>
+  <!-- URL text -->
+  <text x="140" y="435" font-family="'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif"
+        font-size="17" font-weight="500" fill="#22d3ee" letter-spacing="0.2">kylekanooth.com</text>
+</svg>

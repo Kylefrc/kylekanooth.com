@@ -1,0 +1,152 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+  ogType?: string;
+  article?: {
+    publishedTime?: string;
+    author?: string;
+  };
+}
+
+const {
+  title,
+  description,
+  canonicalUrl = Astro.url.href,
+  ogImage = '/og-image.png',
+  ogType = 'website',
+  article,
+} = Astro.props;
+
+const siteUrl = 'https://kylekanooth.com';
+const fullOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#0a0a0a" id="theme-color-meta" />
+
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalUrl} />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content={ogType} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:image" content={fullOgImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={title} />
+  <meta property="og:site_name" content="Kyle Kanooth" />
+  <meta property="og:locale" content="en_US" />
+
+  {article?.publishedTime && (
+    <meta property="article:published_time" content={article.publishedTime} />
+  )}
+  {article?.author && (
+    <meta property="article:author" content={article.author} />
+  )}
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:creator" content="@kylekanooth" />
+  <meta name="twitter:image" content={fullOgImage} />
+  <meta name="twitter:image:alt" content={title} />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <slot name="head" />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <slot />
+
+  <!-- Theme toggle script -->
+  <script>
+    const getInitialTheme = () => {
+      try {
+        const stored = localStorage.getItem('kk-theme');
+        if (stored === 'light' || stored === 'dark') return stored;
+      } catch (_) {}
+      return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    };
+
+    const applyTheme = (theme) => {
+      const root = document.documentElement;
+      if (theme === 'light') {
+        root.classList.add('light');
+      } else {
+        root.classList.remove('light');
+      }
+      const meta = document.querySelector('#theme-color-meta');
+      if (meta) meta.content = theme === 'light' ? '#f8f9fb' : '#0a0a0a';
+      try { localStorage.setItem('kk-theme', theme); } catch (_) {}
+    };
+
+    applyTheme(getInitialTheme());
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-theme-toggle]');
+      if (!btn) return;
+      const current = document.documentElement.classList.contains('light') ? 'light' : 'dark';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    });
+  </script>
+
+  <!-- Scroll reveal -->
+  <script>
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
+    } else {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    }
+  </script>
+
+  <!-- Animated counters -->
+  <script>
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+      document.querySelectorAll('[data-count-to]').forEach((el) => {
+        const end = parseInt(el.dataset.countTo, 10);
+        const io = new IntersectionObserver(([entry]) => {
+          if (!entry.isIntersecting) return;
+          io.disconnect();
+          const start = performance.now();
+          const duration = 1800;
+          const tick = (now) => {
+            const t = Math.min((now - start) / duration, 1);
+            el.textContent = Math.round(easeOutQuart(t) * end);
+            if (t < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }, { threshold: 0.3 });
+        io.observe(el);
+      });
+    }
+  </script>
+</body>
+</html>

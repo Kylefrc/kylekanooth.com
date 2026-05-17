@@ -1,0 +1,91 @@
+---
+const techStack = [
+  { label: 'React',      dot: '#61dafb' },
+  { label: 'Python',     dot: '#3b82f6' },
+  { label: 'TypeScript', dot: '#3178c6' },
+  { label: 'FastAPI',    dot: '#059669' },
+  { label: 'Claude',     dot: '#d97706' },
+  { label: 'Tailwind',   dot: '#06b6d4' },
+];
+
+const certs = [
+  'Energy Trust of Oregon',
+  'PCEF',
+  'BPI Certified',
+  'Clark PUD',
+  '25C / 25D Tax Credits',
+];
+---
+
+<section
+  aria-labelledby="trust-badges-heading"
+  class="reveal py-14 md:py-16 bg-surface/50 border-y border-border"
+>
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+
+    <!-- Built with -->
+    <div class="mb-8">
+      <p
+        id="trust-badges-heading"
+        class="text-xs text-textMut uppercase tracking-widest text-center mb-4"
+      >
+        Built with
+      </p>
+      <ul
+        class="flex flex-wrap justify-center gap-3"
+        aria-label="Technologies used"
+      >
+        {techStack.map(({ label, dot }) => (
+          <li>
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-bg border border-border text-sm text-textSec">
+              <span
+                class="w-2 h-2 rounded-full flex-shrink-0"
+                style={`background-color: ${dot};`}
+                aria-hidden="true"
+              ></span>
+              {label}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Divider -->
+    <div class="h-px bg-border w-24 mx-auto mb-8" aria-hidden="true"></div>
+
+    <!-- Programs & certifications -->
+    <div>
+      <p class="text-xs text-textMut uppercase tracking-widest text-center mb-4">
+        Programs &amp; certifications
+      </p>
+      <ul
+        class="flex flex-wrap justify-center gap-3"
+        aria-label="Programs and certifications"
+      >
+        {certs.map((cert) => (
+          <li>
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-bg border border-border text-sm text-textSec">
+              <!-- Checkmark icon -->
+              <svg
+                aria-hidden="true"
+                class="w-3.5 h-3.5 text-cyan flex-shrink-0"
+                viewBox="0 0 16 16"
+                fill="none"
+              >
+                <path
+                  d="M2 8.5l4.5 4.5L14 3"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              {cert}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+  </div>
+</section>

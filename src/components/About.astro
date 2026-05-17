@@ -1,0 +1,81 @@
+---
+---
+
+<section
+  id="about"
+  aria-labelledby="about-heading"
+  class="py-20 md:py-28 border-t border-[var(--c-border)]"
+>
+  <div class="max-w-6xl mx-auto px-5 md:px-8 grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+
+    <!-- Left: visual card -->
+    <div class="reveal order-2 md:order-1">
+      <div
+        class="relative rounded-2xl bg-[var(--c-surface)] border border-[var(--c-border)] p-8 glow-cyan-lg overflow-hidden"
+        role="complementary"
+        aria-label="Quick facts about Kyle"
+      >
+        <!-- Circuit-line background -->
+        <div aria-hidden="true" class="absolute inset-0 grid-lines opacity-50"></div>
+
+        <div class="relative">
+          <!-- Icon -->
+          <div
+            class="w-14 h-14 rounded-xl bg-[#22d3ee]/10 border border-[#22d3ee]/20 flex items-center justify-center mb-6"
+            aria-hidden="true"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" class="w-7 h-7 text-[#22d3ee]">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <!-- Quick facts -->
+          <dl class="space-y-4">
+            <div class="flex justify-between items-center border-b border-[var(--c-border)] pb-3">
+              <dt class="text-[var(--c-text-mut)] text-sm">Day job</dt>
+              <dd class="text-[var(--c-text-pri)] text-sm font-medium">Energy Efficiency Consulting</dd>
+            </div>
+            <div class="flex justify-between items-center border-b border-[var(--c-border)] pb-3">
+              <dt class="text-[var(--c-text-mut)] text-sm">Location</dt>
+              <dd class="text-[var(--c-text-pri)] text-sm font-medium">Portland, OR</dd>
+            </div>
+            <div class="flex justify-between items-center border-b border-[var(--c-border)] pb-3">
+              <dt class="text-[var(--c-text-mut)] text-sm">Night shift</dt>
+              <dd class="text-[var(--c-text-pri)] text-sm font-medium">SaaS, tools, agents, courses</dd>
+            </div>
+            <div class="flex justify-between items-center pb-0">
+              <dt class="text-[var(--c-text-mut)] text-sm">Stack</dt>
+              <dd class="text-[var(--c-text-pri)] text-sm font-medium">Python · TypeScript · React · Claude</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: text -->
+    <div class="order-1 md:order-2">
+      <span class="reveal text-[#22d3ee] text-xs uppercase tracking-[0.2em] font-medium" aria-hidden="true">About</span>
+
+      <h2
+        id="about-heading"
+        class="reveal mt-3 font-display text-3xl sm:text-4xl font-bold text-[var(--c-text-pri)] leading-tight"
+        data-delay="1"
+      >
+        Energy efficiency consultant by day. Builder by night.
+      </h2>
+
+      <p class="reveal mt-5 text-[var(--c-text-sec)] leading-relaxed" data-delay="2">
+        I sell residential energy retrofits at Resilient Retrofits in Portland — heat pumps, insulation, air sealing, full electrification. The work is deeply technical and deeply human: sitting at kitchen tables helping families make expensive, lasting decisions.
+      </p>
+
+      <p class="reveal mt-4 text-[var(--c-text-sec)] leading-relaxed" data-delay="3">
+        Nights and weekends I build. I use Claude and MCP-powered agents to automate the repetitive stuff — research, writing, QA, code — so my focused hours go toward the problems that actually require a human. If it can run overnight, I want it running overnight.
+      </p>
+
+      <p class="reveal mt-4 text-[var(--c-text-sec)] leading-relaxed" data-delay="4">
+        Current builds: a day-trading dashboard, an energy audit automation tool, and a web scraping course — all moving in parallel, mostly while I'm asleep.
+      </p>
+    </div>
+
+  </div>
+</section>

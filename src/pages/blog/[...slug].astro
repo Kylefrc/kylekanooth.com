@@ -1,0 +1,254 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+const publishedTime = post.data.date.toISOString();
+const siteUrl = 'https://kylekanooth.com';
+const postUrl = `${siteUrl}/blog/${post.slug}`;
+
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: publishedTime,
+  author: {
+    '@type': 'Person',
+    name: 'Kyle Kanooth',
+    url: siteUrl,
+  },
+  publisher: {
+    '@type': 'Person',
+    name: 'Kyle Kanooth',
+    url: siteUrl,
+  },
+  url: postUrl,
+  keywords: post.data.tags?.join(', '),
+});
+---
+
+<BaseLayout
+  title={`${post.data.title} — Kyle Kanooth`}
+  description={post.data.description}
+  ogType="article"
+  article={{
+    publishedTime,
+    author: 'Kyle Kanooth',
+  }}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={jsonLd} />
+  </Fragment>
+
+  <main id="main-content" class="min-h-screen bg-bg text-textPri">
+    <!-- Nav -->
+    <nav class="sticky top-0 z-50 border-b border-border bg-[var(--c-nav-bg)] backdrop-blur-md">
+      <div class="max-w-3xl mx-auto px-6 h-14 flex items-center gap-6">
+        <a href="/" class="font-display font-semibold text-textPri nav-link text-sm">Kyle Kanooth</a>
+        <span class="text-border" aria-hidden="true">/</span>
+        <a href="/blog" class="text-textMut text-sm nav-link hover:text-textPri transition-colors">Blog</a>
+        <div class="ml-auto">
+          <button
+            data-theme-toggle
+            class="theme-toggle"
+            aria-label="Toggle color theme"
+          >
+            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Article -->
+    <article class="max-w-3xl mx-auto px-6 pt-14 pb-24">
+      <!-- Back link -->
+      <a
+        href="/blog"
+        class="inline-flex items-center gap-1.5 text-textMut text-sm hover:text-textPri transition-colors mb-10 group"
+      >
+        <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
+        All posts
+      </a>
+
+      <!-- Post header -->
+      <header class="mb-10">
+        <!-- Meta -->
+        <div class="flex items-center gap-3 mb-5">
+          <time datetime={publishedTime} class="text-textMut text-xs font-medium uppercase tracking-widest">
+            {formatDate(post.data.date)}
+          </time>
+          <span class="w-1 h-1 rounded-full bg-border" aria-hidden="true"></span>
+          <span class="text-textMut text-xs">{post.data.readTime}</span>
+        </div>
+
+        <!-- Title -->
+        <h1 class="font-display text-3xl md:text-4xl font-bold text-textPri leading-tight mb-5">
+          {post.data.title}
+        </h1>
+
+        <!-- Description -->
+        <p class="text-textSec text-lg leading-relaxed">
+          {post.data.description}
+        </p>
+
+        <!-- Tags -->
+        {post.data.tags && post.data.tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 mt-6">
+            {post.data.tags.map((tag) => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+        )}
+
+        <!-- Divider -->
+        <div class="mt-8 h-px bg-border"></div>
+      </header>
+
+      <!-- Post body -->
+      <div class="prose-blog">
+        <Content />
+      </div>
+
+      <!-- Bottom nav -->
+      <div class="mt-16 pt-8 border-t border-border flex items-center justify-between gap-4">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-1.5 text-textSec text-sm hover:text-textPri transition-colors group"
+        >
+          <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+          </svg>
+          Back to all posts
+        </a>
+        <a href="/#contact" class="text-cyan text-sm font-medium hover:text-cyanLt transition-colors">
+          Get in touch &rarr;
+        </a>
+      </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="border-t border-border">
+      <div class="max-w-3xl mx-auto px-6 py-8">
+        <p class="text-textMut text-sm text-center">&copy; {new Date().getFullYear()} Kyle Kanooth. All rights reserved.</p>
+      </div>
+    </footer>
+  </main>
+</BaseLayout>
+
+<style>
+  .prose-blog {
+    color: var(--c-text-sec);
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .prose-blog :global(p) {
+    margin-bottom: 1.4rem;
+  }
+
+  .prose-blog :global(h2),
+  .prose-blog :global(h3),
+  .prose-blog :global(h4) {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-weight: 600;
+    color: var(--c-text-pri);
+    margin-top: 2.5rem;
+    margin-bottom: 0.85rem;
+    line-height: 1.3;
+  }
+
+  .prose-blog :global(h2) { font-size: 1.5rem; }
+  .prose-blog :global(h3) { font-size: 1.25rem; }
+  .prose-blog :global(h4) { font-size: 1.1rem; }
+
+  .prose-blog :global(strong) {
+    color: var(--c-text-pri);
+    font-weight: 600;
+  }
+
+  .prose-blog :global(em) {
+    font-style: italic;
+  }
+
+  .prose-blog :global(a) {
+    color: #22d3ee;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 150ms ease;
+  }
+  .prose-blog :global(a:hover) {
+    color: #67e8f9;
+  }
+
+  .prose-blog :global(ul),
+  .prose-blog :global(ol) {
+    margin-bottom: 1.4rem;
+    padding-left: 1.5rem;
+  }
+
+  .prose-blog :global(ul) { list-style-type: disc; }
+  .prose-blog :global(ol) { list-style-type: decimal; }
+
+  .prose-blog :global(li) {
+    margin-bottom: 0.5rem;
+  }
+
+  .prose-blog :global(blockquote) {
+    border-left: 3px solid #22d3ee;
+    padding-left: 1.25rem;
+    margin: 1.5rem 0;
+    color: var(--c-text-mut);
+    font-style: italic;
+  }
+
+  .prose-blog :global(code) {
+    font-size: 0.875em;
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: 4px;
+    padding: 0.15em 0.4em;
+    color: #a5f3fc;
+  }
+
+  .prose-blog :global(pre) {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    margin-bottom: 1.4rem;
+  }
+
+  .prose-blog :global(pre code) {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.875rem;
+    color: var(--c-text-sec);
+  }
+
+  .prose-blog :global(hr) {
+    border: none;
+    border-top: 1px solid var(--c-border);
+    margin: 2rem 0;
+  }
+</style>
