@@ -1,0 +1,162 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface UseItem {
+  name: string;
+  why: string;
+}
+
+interface UseSection {
+  id: string;
+  heading: string;
+  items: UseItem[];
+}
+
+const sections: UseSection[] = [
+  {
+    id: 'hardware',
+    heading: 'Hardware',
+    items: [
+      { name: 'MacBook Pro M3 Max', why: 'Handles long-running agent workflows and local model inference without breaking a sweat.' },
+      { name: 'Apple Studio Display', why: 'Large canvas for side-by-side code, terminal, and browser — essential when reviewing scraper output.' },
+      { name: 'Keychron Q1', why: 'Compact mechanical keyboard that travels easily between the office and field sites.' },
+      { name: 'AirPods Pro 2', why: 'Active noise cancellation makes phone-heavy sales days bearable — and clear for customer calls.' },
+      { name: 'iPhone 15 Pro', why: 'Primary device for ServiceTitan on the go, quick photos of job sites, and field team communication.' },
+    ],
+  },
+  {
+    id: 'editor-terminal',
+    heading: 'Editor & terminal',
+    items: [
+      { name: 'VS Code', why: 'Still my primary editor for Python and TypeScript — extensions ecosystem is hard to beat.' },
+      { name: 'Claude Code CLI', why: 'Where most of my implementation work actually happens now — agentic coding loop inside the terminal.' },
+      { name: 'iTerm2 + zsh', why: 'Split panes, profiles per project, and shell integrations that make juggling multiple services easy.' },
+      { name: 'Warp', why: 'Use it for quick one-off commands and its AI command-search when I can\'t remember a flag.' },
+    ],
+  },
+  {
+    id: 'ai-automation',
+    heading: 'AI & automation',
+    items: [
+      { name: 'Claude Code', why: 'Powers the bulk of my development — from scaffold to debug loop — inside an agentic coding session.' },
+      { name: 'Claude API', why: 'Backbone of my overnight automation pipelines: pipeline prep, reporting, and ST data wrangling.' },
+      { name: 'MCP — ServiceTitan', why: 'Gives Claude direct access to job records, estimates, and dispatch data without copy-pasting.' },
+      { name: 'MCP — Firecrawl', why: 'Clean web scraping inside agent sessions — no headless browser setup for structured data pulls.' },
+      { name: 'MCP — Dialpad', why: 'Call log access inside Claude so I can reference conversation notes when building follow-up workflows.' },
+      { name: 'MCP — GitHub', why: 'Code ops and PR management without leaving the agent context.' },
+    ],
+  },
+  {
+    id: 'languages-frameworks',
+    heading: 'Languages & frameworks',
+    items: [
+      { name: 'Python', why: 'Primary language for automation, scraping, data processing, and anything backend-ish.' },
+      { name: 'TypeScript', why: 'All frontend and Node work — the type safety pays off fast in larger codebases.' },
+      { name: 'React', why: 'Component model is still the clearest mental model for interactive UI, especially dashboards.' },
+      { name: 'FastAPI', why: 'Quick to spin up, async by default, and the automatic OpenAPI docs save time when wiring to frontends.' },
+      { name: 'Astro', why: 'Ships almost zero JS by default — perfect for content-heavy sites that need fast load times.' },
+      { name: 'Tailwind CSS', why: 'Utility-first workflow matches how I think about design: iterate visually, not in stylesheets.' },
+    ],
+  },
+  {
+    id: 'field-tools',
+    heading: 'Field tools',
+    items: [
+      { name: 'ServiceTitan', why: 'CRM, dispatch, and estimate platform for Resilient Retrofits — every job lives here.' },
+      { name: 'Snugg Pro', why: 'Energy audit and modeling software used to scope EFH projects and calculate rebate-eligible quantities.' },
+      { name: 'Blower Door — Retrotec', why: 'Measures building air leakage; required for air sealing verification under Energy Trust of Oregon specs.' },
+      { name: 'ETO portal', why: 'Energy Trust of Oregon incentive submission and tracking — where rebates get filed and approved.' },
+    ],
+  },
+  {
+    id: 'hosting-infra',
+    heading: 'Hosting & infra',
+    items: [
+      { name: 'Netlify', why: 'Instant deploys from git push, branch previews, and form handling — zero-config for most static sites.' },
+      { name: 'Supabase', why: 'Postgres with a good REST API and auth layer; handles the persistence layer for my internal tools.' },
+      { name: 'Cloudflare', why: 'DNS, DDoS protection, and CDN — set it once and stop thinking about it.' },
+      { name: 'Plausible', why: 'Privacy-respecting analytics that gives me the signal I care about without bloating page weight.' },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Uses — Kyle Kanooth's Hardware & Software"
+  description="Hardware and software I rely on daily: MacBook Pro, VS Code, Claude Code, Astro, FastAPI, React, ServiceTitan, Snugg Pro."
+>
+  <Fragment slot="structured-data">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://kylekanooth.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Uses", "item": "https://kylekanooth.com/uses/" }
+      ]
+    })} />
+  </Fragment>
+
+  <Nav />
+
+  <main id="main-content" class="pt-20 min-h-screen bg-[var(--c-bg)]">
+    <div class="max-w-6xl mx-auto px-5 md:px-8 py-20 md:py-28">
+
+      <!-- Header -->
+      <div class="max-w-2xl mb-16 reveal">
+        <span class="tag mb-4 inline-block">/uses</span>
+        <h1 class="font-display text-4xl md:text-5xl font-semibold text-[var(--c-text-pri)] mb-4 leading-tight">
+          Tools I Use
+        </h1>
+        <p class="text-[var(--c-text-sec)] text-lg leading-relaxed">
+          Hardware, software, and services that make up my daily workflow — across sales, field work, and building things.
+        </p>
+      </div>
+
+      <!-- Jump nav -->
+      <nav aria-label="Jump to section" class="mb-12 reveal" data-delay="1">
+        <ul class="flex flex-wrap gap-2" role="list">
+          {sections.map((s) => (
+            <li>
+              <a
+                href={`#${s.id}`}
+                class="tag text-sm transition-colors"
+              >
+                {s.heading}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <!-- Sections -->
+      <div class="space-y-16">
+        {sections.map((section, i) => (
+          <section id={section.id} aria-labelledby={`${section.id}-heading`} class="reveal" data-delay={String((i % 4) + 1)}>
+            <h2 id={`${section.id}-heading`} class="font-display text-2xl font-semibold text-[var(--c-text-pri)] mb-6 flex items-center gap-3">
+              <span class="w-2 h-2 rounded-full bg-[#6B8F5E] inline-block flex-shrink-0" aria-hidden="true"></span>
+              {section.heading}
+            </h2>
+            <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" role="list">
+              {section.items.map((item) => (
+                <li class="rounded-xl border border-[var(--c-border)] bg-[var(--c-surface)] p-5 card-hover service-glow">
+                  <p class="font-semibold text-[var(--c-text-pri)] mb-1.5 leading-snug">{item.name}</p>
+                  <p class="text-sm text-[var(--c-text-sec)] leading-relaxed">{item.why}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+
+      <!-- Footer note -->
+      <p class="mt-16 text-sm text-[var(--c-text-mut)] reveal">
+        Inspired by the <a href="https://uses.tech" target="_blank" rel="noopener noreferrer" class="text-[#6B8F5E] hover:text-[#2D5016] transition-colors underline underline-offset-2">uses.tech</a> directory. Last reviewed May 2026.
+      </p>
+
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

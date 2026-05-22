@@ -1,12 +1,12 @@
 ---
 title: "From HVAC to AI"
-description: "I spent years running an HVAC company before I wrote a line of production code. Here's how ServiceTitan data problems led me to build automated QC audits, how energy auditing led to SnuggSpec, and how I became a software builder by doing the thing I hated doing manually."
+description: "I spent years in the HVAC and energy efficiency world before I wrote a line of production code. Here's how ServiceTitan data problems led me to build automated QC audits, how energy auditing led to SnuggSpec, and how I became a software builder by doing the thing I hated doing manually."
 date: 2025-04-10
 readTime: "5 min read"
 tags: ["career", "hvac", "servicetitan", "automation"]
 ---
 
-I didn't start as a builder. I started as a guy who installed heat pumps and argued with homeowners about Manual J load calculations. EFH — the company I co-founded before Resilient Retrofits — was a real HVAC operation: vans, techs, dispatch, the whole thing. The software I cared about was ServiceTitan, because ServiceTitan was where the money lived.
+I didn't start as a builder. I started as a guy selling heat pumps and talking homeowners through Manual J load calculations. I work at Resilient Retrofits in Portland — energy efficiency consulting, home performance contracting, the whole EFH program. Vans, techs, dispatch, real field work. The software I cared about was ServiceTitan, because ServiceTitan was where the money lived.
 
 And ServiceTitan had problems. Not with the software — with the data. Jobs would close with $0 revenue. Estimates would sit in "pending" for six months and nobody would notice until we ran a quarterly review and found $30,000 in stale proposals that had silently died. Technicians would finish a job without uploading the required compliance photos and the job would pass through dispatch, invoicing, and collections without anyone flagging it.
 

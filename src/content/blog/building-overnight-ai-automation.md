@@ -6,7 +6,7 @@ readTime: "6 min read"
 tags: ["automation", "ai", "claude", "productivity"]
 ---
 
-The idea was simple: I run an HVAC business during the day and build software at night. There are only so many nights. So I started asking — what if the building happened while I slept?
+The idea was simple: I sell energy retrofits during the day and build software at night. There are only so many nights. So I started asking — what if the building happened while I slept?
 
 The first version was embarrassing. I set up Claude Code as a background agent with a cron job and went to bed feeling clever. I woke up to silence. The agent had hit a file permission error at 2am, printed a stack trace to a log nobody was watching, and stopped. Four hours of potential build time, gone. That failure taught me the most important rule of overnight automation: **silent failure is the only failure that matters.**
 

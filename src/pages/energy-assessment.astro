@@ -1,0 +1,1276 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Free Home Energy Assessment — Portland | Kyle Kanooth"
+  description="2-minute home energy screening. Get an estimate of your savings and which Portland-area rebates (ETO, PCEF, Clark PUD) you qualify for."
+>
+  <Fragment slot="structured-data">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://kylekanooth.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Energy Assessment", "item": "https://kylekanooth.com/energy-assessment/" }
+      ]
+    })} />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How much can I save on a heat pump in Portland?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Most Portland homeowners save $3,000–$7,000 after stacking ETO, PCEF, and federal rebates."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is this assessment a Manual J load calculation?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No — it's a screening tool. A proper Manual J requires an in-home audit with blower-door testing."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which rebates can I stack?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Energy Trust of Oregon, Portland Clean Energy Fund, Clark PUD, and federal 25C tax credits can typically stack with some restrictions."
+          }
+        }
+      ]
+    })} />
+  </Fragment>
+
+  <Nav />
+
+  <main id="main-content" class="pt-20 min-h-screen bg-[var(--c-bg)]">
+
+    <!-- Hidden Netlify form (required for form detection at build time) -->
+    <form name="energy-assessment" data-netlify="true" hidden>
+      <input type="hidden" name="form-name" value="energy-assessment" />
+      <input type="text"   name="name" />
+      <input type="email"  name="email" />
+      <input type="tel"    name="phone" />
+      <input type="text"   name="contact-method" />
+      <input type="text"   name="home-type" />
+      <input type="text"   name="year-built" />
+      <input type="text"   name="square-footage" />
+      <input type="text"   name="stories" />
+      <input type="text"   name="heating-type" />
+      <input type="text"   name="heating-age" />
+      <input type="text"   name="attic-insulation" />
+      <input type="text"   name="wall-insulation" />
+      <input type="text"   name="windows" />
+      <input type="text"   name="comfort-complaints" />
+      <input type="text"   name="monthly-bill" />
+      <input type="text"   name="location" />
+    </form>
+
+    <!-- Quiz container -->
+    <div class="max-w-2xl mx-auto px-5 md:px-8 py-10 md:py-16">
+
+      <!-- Header -->
+      <div id="quiz-header" class="text-center mb-8">
+        <span class="tag mb-4 inline-block">Free Energy Assessment</span>
+        <h1 class="font-display text-3xl md:text-4xl font-semibold text-[var(--c-text-pri)] mb-3">
+          How Much Could You Save?
+        </h1>
+        <p class="text-[var(--c-text-sec)] text-lg">
+          Answer 6 quick questions and get a personalized savings estimate — plus which rebates your home qualifies for.
+        </p>
+      </div>
+
+      <!-- Progress bar -->
+      <div id="progress-wrap" class="mb-8" aria-label="Quiz progress" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="6">
+        <div class="flex items-center justify-between mb-2">
+          <span id="step-label" class="text-sm font-medium text-[var(--c-text-sec)]">Step 1 of 6</span>
+          <span id="step-pct" class="text-sm text-[var(--c-text-mut)]">17%</span>
+        </div>
+        <div class="w-full h-2 bg-[var(--c-border)] rounded-full overflow-hidden">
+          <div
+            id="progress-bar"
+            class="h-full rounded-full transition-all duration-500 ease-out"
+            style="width: 17%; background: linear-gradient(90deg, #2D5016, #6B8F5E);"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Steps container -->
+      <div id="steps-container">
+
+        <!-- ── Step 1: Home Basics ── -->
+        <div class="quiz-step" data-step="1">
+          <h2 class="font-display text-2xl font-semibold text-[var(--c-text-pri)] mb-2">Tell us about your home</h2>
+          <p class="text-[var(--c-text-sec)] mb-3">We'll use this to size your savings estimate accurately.</p>
+          <p class="text-xs text-[var(--c-text-mut)] mb-6 italic">This is a 2-minute screening based on rules of thumb — not a Manual J load calculation or blower-door audit. Use it to decide if a real assessment makes sense.</p>
+
+          <fieldset class="mb-6">
+            <legend class="text-sm font-semibold text-[var(--c-text-sec)] uppercase tracking-wide mb-3">Home type</legend>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="radio-card">
+                <input type="radio" name="home-type" value="Single-family" class="sr-only" />
+                <span class="radio-card-icon">🏠</span>
+                <span class="radio-card-label">Single-family</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="home-type" value="Townhouse" class="sr-only" />
+                <span class="radio-card-icon">🏘</span>
+                <span class="radio-card-label">Townhouse</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="home-type" value="Condo" class="sr-only" />
+                <span class="radio-card-icon">🏢</span>
+                <span class="radio-card-label">Condo</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="home-type" value="Manufactured" class="sr-only" />
+                <span class="radio-card-icon">🏡</span>
+                <span class="radio-card-label">Manufactured</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend class="text-sm font-semibold text-[var(--c-text-sec)] uppercase tracking-wide mb-3">Year built</legend>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="radio-card">
+                <input type="radio" name="year-built" value="Before 1960" class="sr-only" />
+                <span class="radio-card-label">Before 1960</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="year-built" value="1960-1979" class="sr-only" />
+                <span class="radio-card-label">1960–1979</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="year-built" value="1980-1999" class="sr-only" />
+                <span class="radio-card-label">1980–1999</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="year-built" value="2000+" class="sr-only" />
+                <span class="radio-card-label">2000+</span>
+              </label>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- ── Step 2: Home Size ── -->
+        <div class="quiz-step hidden" data-step="2">
+          <h2 class="font-display text-2xl font-semibold text-[var(--c-text-pri)] mb-2">How big is your home?</h2>
+          <p class="text-[var(--c-text-sec)] mb-6">Bigger homes have more surface area to insulate — and more savings potential.</p>
+
+          <div class="mb-6">
+            <label for="sqft-input" class="text-sm font-semibold text-[var(--c-text-sec)] uppercase tracking-wide mb-3 block">
+              Approximate square footage
+            </label>
+            <div class="space-y-3">
+              <input
+                type="range"
+                id="sqft-slider"
+                name="square-footage-slider"
+                min="500"
+                max="5000"
+                step="100"
+                value="1500"
+                class="w-full accent-[#2D5016] cursor-pointer"
+                aria-label="Square footage slider"
+              />
+              <div class="flex items-center gap-3">
+                <input
+                  type="number"
+                  id="sqft-input"
+                  name="square-footage"
+                  min="500"
+                  max="5000"
+                  value="1500"
+                  class="w-32 px-3 py-2 rounded-lg border border-[var(--c-border)] bg-[var(--c-surface)] text-[var(--c-text-pri)] text-center focus:outline-none focus:border-[#6B8F5E]"
+                />
+                <span class="text-[var(--c-text-sec)]">sq ft</span>
+              </div>
+              <div class="flex justify-between text-xs text-[var(--c-text-mut)]">
+                <span>500</span><span>2,750</span><span>5,000</span>
+              </div>
+            </div>
+          </div>
+
+          <fieldset>
+            <legend class="text-sm font-semibold text-[var(--c-text-sec)] uppercase tracking-wide mb-3">Number of stories</legend>
+            <div class="grid grid-cols-4 gap-3">
+              <label class="radio-card">
+                <input type="radio" name="stories" value="1" class="sr-only" />
+                <span class="radio-card-label">1</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="stories" value="1.5" class="sr-only" />
+                <span class="radio-card-label">1.5</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="stories" value="2" class="sr-only" />
+                <span class="radio-card-label">2</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="stories" value="3+" class="sr-only" />
+                <span class="radio-card-label">3+</span>
+              </label>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- ── Step 3: Heating ── -->
+        <div class="quiz-step hidden" data-step="3">
+          <h2 class="font-display text-2xl font-semibold text-[var(--c-text-pri)] mb-2">How do you heat your home?</h2>
+          <p class="text-[var(--c-text-sec)] mb-6">Your heating system has the biggest impact on your energy bills.</p>
+
+          <fieldset class="mb-6">
+            <legend class="text-sm font-semibold text-[var(--c-text-sec)] uppercase tracking-wide mb-3">Primary heating system</legend>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="radio-card">
+                <input type="radio" name="heating-type" value="Gas furnace" class="sr-only" />
+                <span class="radio-card-icon">🔥</span>
+                <span class="radio-card-label">Gas furnace</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="heating-type" value="Electric furnace" class="sr-only" />
+                <span class="radio-card-icon">⚡</span>
+                <span class="radio-card-label">Electric furnace</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="heating-type" value="Heat pump" class="sr-only" />
+                <span class="radio-card-icon">🌀</span>
+                <span class="radio-card-label">Heat pump</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="heating-type" value="Baseboard/wall" class="sr-only" />
+                <span class="radio-card-icon">📡</span>
+                <span class="radio-card-label">Baseboard / wall</span>
+              </label>
+              <label class="radio-card col-span-2">
+                <input type="radio" name="heating-type" value="Other" class="sr-only" />
+                <span class="radio-card-label">Other / not sure</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend class="text-sm font-semibold text-[var(--c-text-sec)] uppercase tracking-wide mb-3">Age of heating system</legend>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="radio-card">
+                <input type="radio" name="heating-age" value="Less than 5 years" class="sr-only" />
+                <span class="radio-card-label">Less than 5 yrs</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="heating-age" value="5-10 years" class="sr-only" />
+                <span class="radio-card-label">5–10 years</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="heating-age" value="10-15 years" class="sr-only" />
+                <span class="radio-card-label">10–15 years</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="heating-age" value="15+ years" class="sr-only" />
+                <span class="radio-card-label">15+ years</span>
+              </label>
+              <label class="radio-card col-span-2">
+                <input type="radio" name="heating-age" value="Not sure" class="sr-only" />
+                <span class="radio-card-label">Not sure</span>
+              </label>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- ── Step 4: Insulation & Envelope ── -->
+        <div class="quiz-step hidden" data-step="4">
+          <h2 class="font-display text-2xl font-semibold text-[var(--c-text-pri)] mb-2">Insulation & comfort</h2>
+          <p class="text-[var(--c-text-sec)] mb-6">The building envelope is often the biggest source of energy loss.</p>
+
+          <fieldset class="mb-5">
+            <legend class="text-sm font-semibold text-[var(--c-text-sec)] uppercase tracking-wide mb-3">Attic insulation</legend>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="radio-card col-span-2">
+                <input type="radio" name="attic-insulation" value="None or unknown" class="sr-only" />
+                <span class="radio-card-label">None / unknown</span>
+              </label>
+              <label class="radio-card col-span-2">
+                <input type="radio" name="attic-insulation" value="R-11 to R-19" class="sr-only" />
+                <span class="radio-card-label">R-11 to R-19 (older code minimum)</span>
+              </label>
+              <label class="radio-card col-span-2">
+                <input type="radio" name="attic-insulation" value="R-19 to R-38" class="sr-only" />
+                <span class="radio-card-label">R-19 to R-38 (mid-range)</span>
+              </label>
+              <label class="radio-card col-span-2">
+                <input type="radio" name="attic-insulation" value="R-38 to R-49" class="sr-only" />
+                <span class="radio-card-label">R-38 to R-49 (current Oregon code)</span>
+              </label>
+              <label class="radio-card col-span-2">
+                <input type="radio" name="attic-insulation" value="R-49 plus" class="sr-only" />
+                <span class="radio-card-label">R-49+ (well-insulated)</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="mb-5">
+            <legend class="text-sm font-semibold text-[var(--c-text-sec)] uppercase tracking-wide mb-3">Wall insulation</legend>
+            <div class="grid grid-cols-3 gap-3">
+              <label class="radio-card">
+                <input type="radio" name="wall-insulation" value="Yes" class="sr-only" />
+                <span class="radio-card-label">Yes</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="wall-insulation" value="No" class="sr-only" />
+                <span class="radio-card-label">No</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="wall-insulation" value="Not sure" class="sr-only" />
+                <span class="radio-card-label">Not sure</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="mb-5">
+            <legend class="text-sm font-semibold text-[var(--c-text-sec)] uppercase tracking-wide mb-3">Windows</legend>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="radio-card">
+                <input type="radio" name="windows" value="Double-pane" class="sr-only" />
+                <span class="radio-card-label">Double-pane</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="windows" value="Single-pane" class="sr-only" />
+                <span class="radio-card-label">Single-pane</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="windows" value="Mix" class="sr-only" />
+                <span class="radio-card-label">Mix</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="windows" value="Not sure" class="sr-only" />
+                <span class="radio-card-label">Not sure</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend class="text-sm font-semibold text-[var(--c-text-sec)] uppercase tracking-wide mb-3">
+              Biggest comfort complaints <span class="text-[var(--c-text-mut)] normal-case font-normal">(select all that apply)</span>
+            </legend>
+            <div class="grid grid-cols-2 gap-2">
+              <label class="checkbox-card">
+                <input type="checkbox" name="comfort-complaints" value="Drafty rooms" class="sr-only" />
+                <span class="checkbox-card-check" aria-hidden="true"></span>
+                <span>Drafty rooms</span>
+              </label>
+              <label class="checkbox-card">
+                <input type="checkbox" name="comfort-complaints" value="Hot/cold spots" class="sr-only" />
+                <span class="checkbox-card-check" aria-hidden="true"></span>
+                <span>Hot/cold spots</span>
+              </label>
+              <label class="checkbox-card">
+                <input type="checkbox" name="comfort-complaints" value="High energy bills" class="sr-only" />
+                <span class="checkbox-card-check" aria-hidden="true"></span>
+                <span>High energy bills</span>
+              </label>
+              <label class="checkbox-card">
+                <input type="checkbox" name="comfort-complaints" value="Noisy HVAC" class="sr-only" />
+                <span class="checkbox-card-check" aria-hidden="true"></span>
+                <span>Noisy HVAC</span>
+              </label>
+              <label class="checkbox-card">
+                <input type="checkbox" name="comfort-complaints" value="Poor air quality" class="sr-only" />
+                <span class="checkbox-card-check" aria-hidden="true"></span>
+                <span>Poor air quality</span>
+              </label>
+              <label class="checkbox-card">
+                <input type="checkbox" name="comfort-complaints" value="Condensation on windows" class="sr-only" />
+                <span class="checkbox-card-check" aria-hidden="true"></span>
+                <span>Condensation on windows</span>
+              </label>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- ── Step 5: Energy Costs ── -->
+        <div class="quiz-step hidden" data-step="5">
+          <h2 class="font-display text-2xl font-semibold text-[var(--c-text-pri)] mb-2">Your energy costs</h2>
+          <p class="text-[var(--c-text-sec)] mb-6">This helps us calculate realistic dollar savings for your specific situation.</p>
+
+          <fieldset class="mb-6">
+            <legend class="text-sm font-semibold text-[var(--c-text-sec)] uppercase tracking-wide mb-3">Average monthly energy bill</legend>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="radio-card">
+                <input type="radio" name="monthly-bill" value="Under $100" class="sr-only" />
+                <span class="radio-card-label">Under $100</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="monthly-bill" value="$100-200" class="sr-only" />
+                <span class="radio-card-label">$100–200</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="monthly-bill" value="$200-300" class="sr-only" />
+                <span class="radio-card-label">$200–300</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="monthly-bill" value="$300-400" class="sr-only" />
+                <span class="radio-card-label">$300–400</span>
+              </label>
+              <label class="radio-card col-span-2">
+                <input type="radio" name="monthly-bill" value="$400+" class="sr-only" />
+                <span class="radio-card-label">$400+</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend class="text-sm font-semibold text-[var(--c-text-sec)] uppercase tracking-wide mb-3">Your location</legend>
+            <div class="grid grid-cols-1 gap-3">
+              <label class="radio-card">
+                <input type="radio" name="location" value="Portland metro" class="sr-only" />
+                <span class="radio-card-icon">🌲</span>
+                <span class="radio-card-label">Portland metro (Oregon)</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="location" value="Clark County WA" class="sr-only" />
+                <span class="radio-card-icon">🌉</span>
+                <span class="radio-card-label">Clark County, WA</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="location" value="Other" class="sr-only" />
+                <span class="radio-card-label">Other / not sure</span>
+              </label>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- ── Step 6: Lead Capture ── -->
+        <div class="quiz-step hidden" data-step="6">
+          <h2 class="font-display text-2xl font-semibold text-[var(--c-text-pri)] mb-2">Get your personalized savings estimate</h2>
+          <p class="text-[var(--c-text-sec)] mb-6">
+            We'll send you a detailed breakdown of recommended upgrades and available rebates for your home.
+          </p>
+
+          <form
+            id="lead-form"
+            name="energy-assessment"
+            method="POST"
+            data-netlify="true"
+            class="space-y-4"
+          >
+            <input type="hidden" name="form-name" value="energy-assessment" />
+            <!-- Hidden fields populated by JS -->
+            <input type="hidden" id="hf-home-type"         name="home-type" />
+            <input type="hidden" id="hf-year-built"        name="year-built" />
+            <input type="hidden" id="hf-square-footage"    name="square-footage" />
+            <input type="hidden" id="hf-stories"           name="stories" />
+            <input type="hidden" id="hf-heating-type"      name="heating-type" />
+            <input type="hidden" id="hf-heating-age"       name="heating-age" />
+            <input type="hidden" id="hf-attic-insulation"  name="attic-insulation" />
+            <input type="hidden" id="hf-wall-insulation"   name="wall-insulation" />
+            <input type="hidden" id="hf-windows"           name="windows" />
+            <input type="hidden" id="hf-comfort-complaints" name="comfort-complaints" />
+            <input type="hidden" id="hf-monthly-bill"      name="monthly-bill" />
+            <input type="hidden" id="hf-location"          name="location" />
+
+            <div>
+              <label for="lead-name" class="block text-sm font-medium text-[var(--c-text-sec)] mb-1.5">
+                Full name <span class="text-red-500" aria-hidden="true">*</span>
+              </label>
+              <input
+                type="text"
+                id="lead-name"
+                name="name"
+                required
+                autocomplete="name"
+                placeholder="Jane Smith"
+                class="form-input w-full"
+              />
+            </div>
+
+            <div>
+              <label for="lead-email" class="block text-sm font-medium text-[var(--c-text-sec)] mb-1.5">
+                Email address <span class="text-red-500" aria-hidden="true">*</span>
+              </label>
+              <input
+                type="email"
+                id="lead-email"
+                name="email"
+                required
+                autocomplete="email"
+                placeholder="jane@example.com"
+                class="form-input w-full"
+              />
+            </div>
+
+            <div>
+              <label for="lead-phone" class="block text-sm font-medium text-[var(--c-text-sec)] mb-1.5">
+                Phone number
+                <span class="text-[var(--c-text-mut)] font-normal">(recommended — best way to reach you)</span>
+              </label>
+              <input
+                type="tel"
+                id="lead-phone"
+                name="phone"
+                autocomplete="tel"
+                placeholder="(503) 555-0100"
+                class="form-input w-full"
+              />
+            </div>
+
+            <fieldset>
+              <legend class="text-sm font-medium text-[var(--c-text-sec)] mb-3">
+                Preferred contact method
+              </legend>
+              <div class="grid grid-cols-3 gap-3">
+                <label class="radio-card">
+                  <input type="radio" name="contact-method" value="Email" class="sr-only" />
+                  <span class="radio-card-label">Email</span>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="contact-method" value="Phone" class="sr-only" />
+                  <span class="radio-card-label">Phone</span>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="contact-method" value="Text" class="sr-only" />
+                  <span class="radio-card-label">Text</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <button
+              type="submit"
+              class="btn-primary w-full justify-center text-base mt-2"
+              id="submit-btn"
+            >
+              Get My Estimate
+              <svg aria-hidden="true" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+
+            <!-- Inline submission feedback -->
+            <p id="submit-feedback" class="hidden text-xs text-center mt-2"></p>
+
+            <p class="text-xs text-[var(--c-text-mut)] text-center">
+              No spam, ever. Kyle personally reviews each submission.
+            </p>
+          </form>
+        </div>
+
+      </div><!-- /steps-container -->
+
+      <!-- Navigation buttons (steps 1-5) -->
+      <div id="nav-buttons" class="flex items-center justify-between mt-8 pt-6 border-t border-[var(--c-border)]">
+        <button
+          id="btn-back"
+          class="btn-ghost text-sm"
+          style="display:none;"
+          aria-label="Go to previous step"
+        >
+          <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Back
+        </button>
+        <div></div><!-- spacer when back is hidden -->
+        <button
+          id="btn-next"
+          class="btn-primary text-sm"
+          aria-label="Go to next step"
+        >
+          Next
+          <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+
+    </div><!-- /max-w-2xl quiz container -->
+
+    <!-- ── Results panel (hidden until form submit) ── -->
+    <div id="results-panel" class="hidden max-w-3xl mx-auto px-5 md:px-8 py-10 md:py-16">
+
+      <!-- Reward header -->
+      <div class="text-center mb-10">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[rgba(45,80,22,0.15)] border border-[rgba(107,143,94,0.3)] mb-4">
+          <svg aria-hidden="true" class="w-8 h-8 text-[#6B8F5E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM12 12v.01"/>
+            <path d="M8 12h.01M16 12h.01"/>
+          </svg>
+        </div>
+        <h2 class="font-display text-3xl md:text-4xl font-semibold text-[var(--c-text-pri)] mb-3">Your Assessment Is In</h2>
+        <p class="text-[var(--c-text-sec)] text-lg max-w-xl mx-auto">
+          Here's what we found based on your home profile. Kyle will follow up within 1 business day.
+        </p>
+      </div>
+
+      <!-- Big savings number -->
+      <div class="rounded-2xl border border-[rgba(107,143,94,0.25)] bg-[rgba(45,80,22,0.06)] p-8 mb-6 text-center service-glow">
+        <p class="text-sm font-semibold uppercase tracking-widest text-[#6B8F5E] mb-2">Estimated Annual Savings</p>
+        <p id="savings-range" class="font-display text-5xl md:text-6xl font-bold text-[var(--c-text-pri)] mb-2"></p>
+        <p class="text-[var(--c-text-sec)] text-sm">per year, based on your home profile</p>
+      </div>
+
+      <!-- Recommended upgrades -->
+      <div class="mb-6">
+        <h3 class="font-display text-xl font-semibold text-[var(--c-text-pri)] mb-4">Recommended Upgrades</h3>
+        <div id="upgrades-list" class="space-y-3"></div>
+      </div>
+
+      <!-- Rebates callout -->
+      <div id="rebates-callout" class="rounded-xl border border-[rgba(217,119,6,0.3)] bg-[rgba(217,119,6,0.06)] p-6 mb-6">
+        <div class="flex gap-4 items-start">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-[rgba(217,119,6,0.15)] flex items-center justify-center">
+            <svg aria-hidden="true" class="w-5 h-5 text-[#D97706]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 8v4l3 3"/>
+            </svg>
+          </div>
+          <div>
+            <p class="font-semibold text-[var(--c-text-pri)] mb-1">Potential Rebates Available</p>
+            <p id="rebate-text" class="text-[var(--c-text-sec)] text-sm mb-3"></p>
+            <div class="flex flex-wrap gap-3 items-center">
+              <a href="/rebate-calculator" class="btn-ghost text-sm inline-flex">
+                Calculate My Exact Rebates
+                <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </a>
+              <!-- TODO: swap to Calendly URL once available -->
+              <a href="/#contact" class="btn-primary text-sm inline-flex">
+                Book a 15-min consult with Kyle
+                <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- What's next -->
+      <div class="rounded-xl border border-[var(--c-border)] bg-[var(--c-surface)] p-6 mb-8">
+        <h3 class="font-semibold text-[var(--c-text-pri)] mb-2">What happens next</h3>
+        <ul class="space-y-2 text-sm text-[var(--c-text-sec)]">
+          <li class="flex gap-2.5 items-start">
+            <span class="mt-0.5 w-5 h-5 rounded-full bg-[rgba(45,80,22,0.15)] flex-shrink-0 flex items-center justify-center text-[#6B8F5E] text-xs font-bold">1</span>
+            Kyle personally reviews your assessment
+          </li>
+          <li class="flex gap-2.5 items-start">
+            <span class="mt-0.5 w-5 h-5 rounded-full bg-[rgba(45,80,22,0.15)] flex-shrink-0 flex items-center justify-center text-[#6B8F5E] text-xs font-bold">2</span>
+            You'll hear back within 1 business day with personalized recommendations
+          </li>
+          <li class="flex gap-2.5 items-start">
+            <span class="mt-0.5 w-5 h-5 rounded-full bg-[rgba(45,80,22,0.15)] flex-shrink-0 flex items-center justify-center text-[#6B8F5E] text-xs font-bold">3</span>
+            If it looks like a good fit, we'll schedule a free on-site energy assessment
+          </li>
+        </ul>
+      </div>
+
+      <div class="text-center">
+        <a href="/" class="btn-ghost inline-flex">
+          <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Back to home
+        </a>
+      </div>
+
+    </div><!-- /results-panel -->
+
+  </main>
+
+  <Footer />
+
+</BaseLayout>
+
+<style>
+  /* ── Radio cards ── */
+  .radio-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.875rem 0.75rem;
+    border: 1.5px solid var(--c-border);
+    border-radius: 0.75rem;
+    background: var(--c-surface);
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease, transform 120ms ease;
+    user-select: none;
+  }
+  .radio-card:hover {
+    border-color: rgba(107, 143, 94, 0.5);
+    background: rgba(107, 143, 94, 0.05);
+  }
+  .radio-card:has(input:checked) {
+    border-color: #2D5016;
+    background: rgba(45, 80, 22, 0.1);
+    box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.12);
+    transform: translateY(-1px);
+  }
+  .radio-card-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+  .radio-card-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--c-text-pri);
+    line-height: 1.3;
+  }
+
+  /* ── Checkbox cards ── */
+  .checkbox-card {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 0.875rem;
+    border: 1.5px solid var(--c-border);
+    border-radius: 0.75rem;
+    background: var(--c-surface);
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--c-text-pri);
+    transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+    user-select: none;
+  }
+  .checkbox-card:hover {
+    border-color: rgba(107, 143, 94, 0.5);
+    background: rgba(107, 143, 94, 0.05);
+  }
+  .checkbox-card:has(input:checked) {
+    border-color: #2D5016;
+    background: rgba(45, 80, 22, 0.1);
+    box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.12);
+  }
+  .checkbox-card-check {
+    flex-shrink: 0;
+    width: 1.125rem;
+    height: 1.125rem;
+    border: 1.5px solid var(--c-border);
+    border-radius: 0.25rem;
+    background: var(--c-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 160ms, background 160ms;
+  }
+  .checkbox-card:has(input:checked) .checkbox-card-check {
+    background: #2D5016;
+    border-color: #2D5016;
+  }
+  .checkbox-card:has(input:checked) .checkbox-card-check::after {
+    content: '';
+    display: block;
+    width: 0.35rem;
+    height: 0.6rem;
+    border: 2px solid #fff;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg) translateY(-1px);
+  }
+
+  /* ── Step transition ── */
+  .quiz-step {
+    animation: stepIn 280ms ease both;
+  }
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateX(24px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .quiz-step.step-out {
+    animation: stepOut 180ms ease both;
+  }
+  @keyframes stepOut {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(-24px); }
+  }
+
+  /* ── Form inputs ── */
+  .form-input {
+    padding: 0.625rem 0.875rem;
+    border: 1.5px solid var(--c-border);
+    border-radius: 0.625rem;
+    background: var(--c-surface);
+    color: var(--c-text-pri);
+    font-size: 0.9375rem;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+  }
+  .form-input::placeholder { color: var(--c-text-mut); }
+  .form-input:focus {
+    outline: none;
+    border-color: #6B8F5E;
+    box-shadow: 0 0 0 3px rgba(107, 143, 94, 0.15);
+  }
+
+  /* ── Upgrade card ── */
+  .upgrade-card {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1rem;
+    border: 1px solid var(--c-border);
+    border-radius: 0.75rem;
+    background: var(--c-surface);
+  }
+  .upgrade-icon {
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    background: rgba(45, 80, 22, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+
+  /* ── Range input ── */
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--c-border);
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #2D5016;
+    cursor: pointer;
+    border: 2px solid #6B8F5E;
+    transition: transform 120ms ease;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #2D5016;
+    cursor: pointer;
+    border: 2px solid #6B8F5E;
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .quiz-step { animation: none; }
+    .quiz-step.step-out { animation: none; }
+    .radio-card, .checkbox-card { transition: none; }
+  }
+</style>
+
+<script>
+  // ────────────────────────────────────────────────────────────────────────────
+  //  Quiz state
+  // ────────────────────────────────────────────────────────────────────────────
+  let currentStep = 1;
+  const TOTAL_STEPS = 6;
+
+  const steps       = document.querySelectorAll('.quiz-step');
+  const btnBack     = document.getElementById('btn-back');
+  const btnNext     = document.getElementById('btn-next');
+  const navButtons  = document.getElementById('nav-buttons');
+  const progressBar = document.getElementById('progress-bar');
+  const stepLabel   = document.getElementById('step-label');
+  const stepPct     = document.getElementById('step-pct');
+  const progressWrap = document.getElementById('progress-wrap');
+  const quizHeader  = document.getElementById('quiz-header');
+  const stepsContainer = document.getElementById('steps-container');
+  const resultsPanel = document.getElementById('results-panel');
+  const leadForm    = document.getElementById('lead-form');
+
+  // ── Slider / number sync ──
+  const sqftSlider = document.getElementById('sqft-slider');
+  const sqftInput  = document.getElementById('sqft-input');
+  sqftSlider?.addEventListener('input', () => {
+    sqftInput.value = sqftSlider.value;
+  });
+  sqftInput?.addEventListener('input', () => {
+    const v = Math.min(5000, Math.max(500, parseInt(sqftInput.value) || 500));
+    sqftSlider.value = String(v);
+  });
+
+  // ────────────────────────────────────────────────────────────────────────────
+  //  Navigation helpers
+  // ────────────────────────────────────────────────────────────────────────────
+  function updateProgress(step) {
+    const pct = Math.round((step / TOTAL_STEPS) * 100);
+    progressBar.style.width = pct + '%';
+    stepLabel.textContent   = `Step ${step} of ${TOTAL_STEPS}`;
+    stepPct.textContent     = pct + '%';
+    progressWrap.setAttribute('aria-valuenow', String(step));
+  }
+
+  function showStep(next) {
+    const currentEl = document.querySelector(`.quiz-step[data-step="${currentStep}"]`);
+    const nextEl    = document.querySelector(`.quiz-step[data-step="${next}"]`);
+    if (!nextEl) return;
+
+    if (currentEl) {
+      currentEl.classList.add('step-out');
+      setTimeout(() => {
+        currentEl.classList.add('hidden');
+        currentEl.classList.remove('step-out');
+      }, 180);
+    }
+
+    setTimeout(() => {
+      nextEl.classList.remove('hidden');
+      nextEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+
+    currentStep = next;
+    updateProgress(next);
+
+    // Show/hide Back button
+    if (btnBack) btnBack.style.display = next > 1 ? 'inline-flex' : 'none';
+
+    // On step 6, hide Next button (form has its own submit)
+    if (btnNext) {
+      if (next === TOTAL_STEPS) {
+        btnNext.style.display = 'none';
+      } else {
+        btnNext.style.display = 'inline-flex';
+      }
+    }
+
+    // Hide nav buttons on step 6 (form handles it)
+    if (navButtons) navButtons.style.display = next === TOTAL_STEPS ? 'none' : 'flex';
+  }
+
+  function getRadioValue(name) {
+    const el = document.querySelector(`input[name="${name}"]:checked`);
+    return el ? el.value : '';
+  }
+
+  function validateStep(step) {
+    if (step === 1) {
+      const homeType = getRadioValue('home-type');
+      const yearBuilt = getRadioValue('year-built');
+      if (!homeType || !yearBuilt) {
+        alert('Please select both a home type and year built to continue.');
+        return false;
+      }
+    }
+    if (step === 2) {
+      const sqft = document.getElementById('sqft-input').value;
+      const stories = getRadioValue('stories');
+      if (!sqft || parseInt(sqft) < 500) {
+        alert('Please enter a valid square footage (500–5,000).');
+        return false;
+      }
+      if (!stories) {
+        alert('Please select the number of stories.');
+        return false;
+      }
+    }
+    if (step === 3) {
+      const heatingType = getRadioValue('heating-type');
+      const heatingAge = getRadioValue('heating-age');
+      if (!heatingType || !heatingAge) {
+        alert('Please complete both heating questions.');
+        return false;
+      }
+    }
+    if (step === 4) {
+      const attic = getRadioValue('attic-insulation');
+      const wall  = getRadioValue('wall-insulation');
+      const wins  = getRadioValue('windows');
+      if (!attic || !wall || !wins) {
+        alert('Please answer the attic insulation, wall insulation, and window questions.');
+        return false;
+      }
+    }
+    if (step === 5) {
+      const bill = getRadioValue('monthly-bill');
+      const loc  = getRadioValue('location');
+      if (!bill || !loc) {
+        alert('Please select your monthly energy bill and location.');
+        return false;
+      }
+    }
+    return true;
+  }
+
+  btnNext?.addEventListener('click', () => {
+    if (!validateStep(currentStep)) return;
+    if (currentStep < TOTAL_STEPS) showStep(currentStep + 1);
+  });
+
+  btnBack?.addEventListener('click', () => {
+    if (currentStep > 1) showStep(currentStep - 1);
+  });
+
+  // ────────────────────────────────────────────────────────────────────────────
+  //  Savings calculation
+  // ────────────────────────────────────────────────────────────────────────────
+  function monthlyBillMidpoint(val) {
+    switch (val) {
+      case 'Under $100': return 75;
+      case '$100-200':   return 150;
+      case '$200-300':   return 250;
+      case '$300-400':   return 350;
+      case '$400+':      return 475;
+      default:           return 200;
+    }
+  }
+
+  function calcSavings(answers) {
+    const annual = monthlyBillMidpoint(answers.monthlyBill) * 12;
+    let lowPct  = 0;
+    let highPct = 0;
+
+    const heating = answers.heatingType;
+    const attic   = answers.atticInsulation;
+    const wall    = answers.wallInsulation;
+    const windows = answers.windows;
+    const complaints = answers.comfortComplaints || [];
+
+    // Heat pump upgrade potential
+    if (heating === 'Gas furnace') {
+      lowPct  += 0.20;
+      highPct += 0.30;
+    } else if (heating === 'Electric furnace' || heating === 'Baseboard/wall') {
+      lowPct  += 0.30;
+      highPct += 0.50;
+    }
+    // Attic insulation — mapped from R-value options
+    // None/unknown and R-11 to R-19 = significant opportunity
+    if (attic === 'None or unknown' || attic === 'R-11 to R-19') {
+      lowPct  += 0.10;
+      highPct += 0.15;
+    } else if (attic === 'R-19 to R-38') {
+      // Mid-range: still some room, analogous to old "Some (2-5 inches)"
+      lowPct  += 0.05;
+      highPct += 0.10;
+    }
+    // R-38 to R-49 and R-49+ = no significant savings from attic insulation
+    // Wall insulation
+    if (wall === 'No') {
+      lowPct  += 0.10;
+      highPct += 0.15;
+    } else if (wall === 'Not sure') {
+      lowPct  += 0.05;
+      highPct += 0.10;
+    }
+    // Air sealing (drafty)
+    if (complaints.includes('Drafty rooms')) {
+      lowPct  += 0.05;
+      highPct += 0.10;
+    }
+    // Windows
+    if (windows === 'Single-pane') {
+      lowPct  += 0.05;
+      highPct += 0.10;
+    }
+
+    // Cap at 70% — sanity check
+    lowPct  = Math.min(lowPct,  0.70);
+    highPct = Math.min(highPct, 0.70);
+
+    const low  = Math.round((annual * lowPct)  / 50) * 50;
+    const high = Math.round((annual * highPct) / 50) * 50;
+
+    return { low: Math.max(low, 100), high: Math.max(high, 200) };
+  }
+
+  function buildUpgrades(answers) {
+    const upgrades = [];
+    const heating   = answers.heatingType;
+    const attic     = answers.atticInsulation;
+    const wall      = answers.wallInsulation;
+    const windows   = answers.windows;
+    const complaints = answers.comfortComplaints || [];
+    const heatingAge = answers.heatingAge;
+
+    // Heat pump
+    if (heating === 'Gas furnace' || heating === 'Electric furnace' || heating === 'Baseboard/wall') {
+      upgrades.push({
+        icon: '🌀',
+        title: 'Heat Pump Upgrade',
+        desc: heating === 'Gas furnace'
+          ? 'Modern heat pumps are 2–3x more efficient than gas furnaces and eliminate combustion entirely. Significant savings on both heating and cooling.'
+          : 'Replacing electric resistance heating with a heat pump can cut your heating costs by 30–50%. Works in both heating and cooling season.',
+      });
+    }
+    if (heatingAge === '15+ years' && heating === 'Heat pump') {
+      upgrades.push({
+        icon: '🌀',
+        title: 'Heat Pump Replacement',
+        desc: 'Your current heat pump is aging. A newer variable-speed heat pump is dramatically more efficient — especially in cold weather.',
+      });
+    }
+
+    // Attic insulation — trigger recommendation for None/unknown, R-11–R-19, and R-19–R-38
+    if (attic === 'None or unknown' || attic === 'R-11 to R-19' || attic === 'R-19 to R-38') {
+      upgrades.push({
+        icon: '🏠',
+        title: 'Attic Insulation',
+        desc: 'Heat rises — an under-insulated attic is one of the easiest places to lose energy. Adding blown-in insulation pays back quickly and qualifies for substantial rebates.',
+      });
+    }
+
+    // Wall insulation
+    if (wall === 'No' || wall === 'Not sure') {
+      upgrades.push({
+        icon: '🧱',
+        title: 'Wall Insulation',
+        desc: 'Dense-pack or blown-in wall insulation dramatically reduces heat transfer and eliminates hot/cold spots in rooms along exterior walls.',
+      });
+    }
+
+    // Air sealing (from complaints)
+    if (complaints.includes('Drafty rooms') || complaints.includes('Hot/cold spots')) {
+      upgrades.push({
+        icon: '💨',
+        title: 'Air Sealing',
+        desc: 'Sealing gaps around electrical outlets, plumbing penetrations, and attic bypasses stops drafts at the source and improves your HVAC efficiency.',
+      });
+    }
+
+    // Windows
+    if (windows === 'Single-pane') {
+      upgrades.push({
+        icon: '🪟',
+        title: 'Window Replacement',
+        desc: 'Single-pane windows lose 10x more heat than insulated walls. Upgrading to double-pane or triple-pane windows reduces heat loss and eliminates condensation.',
+      });
+    }
+
+    // Limit to 4
+    return upgrades.slice(0, 4);
+  }
+
+  function rebateText(location, upgrades) {
+    const hasHeatPump  = upgrades.some(u => u.title.includes('Heat Pump'));
+    const hasInsulation = upgrades.some(u => u.title.includes('Insulation'));
+
+    let est = 0;
+    if (hasHeatPump)   est += 4000;
+    if (hasInsulation) est += 1800;
+
+    const locLabel = location === 'Portland metro' ? 'Oregon'
+                   : location === 'Clark County WA' ? 'Washington state'
+                   : 'your area';
+
+    if (est > 0) {
+      return `Based on your location in ${locLabel}, you may qualify for $${est.toLocaleString()}+ in rebates through Energy Trust of Oregon, PCEF, and utility programs. Use the calculator for exact amounts.`;
+    }
+    return `Based on your location in ${locLabel}, several rebate programs may apply to your upgrades. Use the calculator to see exact amounts.`;
+  }
+
+  // ────────────────────────────────────────────────────────────────────────────
+  //  Form submission
+  // ────────────────────────────────────────────────────────────────────────────
+  leadForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Populate hidden fields from quiz answers
+    const answers = {
+      homeType:          getRadioValue('home-type'),
+      yearBuilt:         getRadioValue('year-built'),
+      squareFootage:     document.getElementById('sqft-input')?.value || '',
+      stories:           getRadioValue('stories'),
+      heatingType:       getRadioValue('heating-type'),
+      heatingAge:        getRadioValue('heating-age'),
+      atticInsulation:   getRadioValue('attic-insulation'),
+      wallInsulation:    getRadioValue('wall-insulation'),
+      windows:           getRadioValue('windows'),
+      comfortComplaints: [...document.querySelectorAll('input[name="comfort-complaints"]:checked')].map(el => el.value),
+      monthlyBill:       getRadioValue('monthly-bill'),
+      location:          getRadioValue('location'),
+    };
+
+    document.getElementById('hf-home-type').value          = answers.homeType;
+    document.getElementById('hf-year-built').value         = answers.yearBuilt;
+    document.getElementById('hf-square-footage').value     = answers.squareFootage;
+    document.getElementById('hf-stories').value            = answers.stories;
+    document.getElementById('hf-heating-type').value       = answers.heatingType;
+    document.getElementById('hf-heating-age').value        = answers.heatingAge;
+    document.getElementById('hf-attic-insulation').value   = answers.atticInsulation;
+    document.getElementById('hf-wall-insulation').value    = answers.wallInsulation;
+    document.getElementById('hf-windows').value            = answers.windows;
+    document.getElementById('hf-comfort-complaints').value = answers.comfortComplaints.join(', ');
+    document.getElementById('hf-monthly-bill').value       = answers.monthlyBill;
+    document.getElementById('hf-location').value           = answers.location;
+
+    // Disable submit button and show loading state
+    const submitBtn = document.getElementById('submit-btn');
+    const submitFeedback = document.getElementById('submit-feedback');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting…';
+    }
+
+    // Submit to Netlify asynchronously
+    const formData = new FormData(leadForm);
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(formData).toString(),
+    }).then(() => {
+      if (submitFeedback) {
+        submitFeedback.textContent = 'Submitted — Kyle will email you within 1 business day.';
+        submitFeedback.className = 'text-xs text-center mt-2 text-[#2D5016]';
+      }
+    }).catch(() => {
+      if (submitFeedback) {
+        submitFeedback.textContent = 'Couldn\'t submit. Email kyle.kanooth@gmail.com directly.';
+        submitFeedback.className = 'text-xs text-center mt-2 text-red-600';
+      }
+    });
+
+    // Calculate results
+    const savings  = calcSavings(answers);
+    const upgrades = buildUpgrades(answers);
+    const rebate   = rebateText(answers.location, upgrades);
+
+    // Render savings range
+    const savingsEl = document.getElementById('savings-range');
+    if (savingsEl) {
+      savingsEl.textContent = `$${savings.low.toLocaleString()} – $${savings.high.toLocaleString()}`;
+    }
+
+    // Render upgrades
+    const upgradesList = document.getElementById('upgrades-list');
+    if (upgradesList) {
+      if (upgrades.length === 0) {
+        upgradesList.innerHTML = '<p class="text-[var(--c-text-sec)] text-sm">Your home looks well-maintained — a professional assessment will identify any remaining opportunities.</p>';
+      } else {
+        upgradesList.innerHTML = upgrades.map(u => `
+          <div class="upgrade-card">
+            <div class="upgrade-icon">${u.icon}</div>
+            <div>
+              <p class="font-semibold text-[var(--c-text-pri)] text-sm mb-1">${u.title}</p>
+              <p class="text-[var(--c-text-sec)] text-sm leading-relaxed">${u.desc}</p>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Render rebate text
+    const rebateEl = document.getElementById('rebate-text');
+    if (rebateEl) rebateEl.textContent = rebate;
+
+    // Hide quiz, show results
+    quizHeader?.classList.add('hidden');
+    progressWrap?.classList.add('hidden');
+    stepsContainer?.classList.add('hidden');
+    navButtons?.classList.add('hidden');
+    resultsPanel?.classList.remove('hidden');
+    resultsPanel?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+</script>

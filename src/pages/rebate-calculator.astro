@@ -1,0 +1,968 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Portland Rebate Calculator — ETO, PCEF, Clark PUD"
+  description="Free rebate stack calculator for Portland-area homeowners. Heat pumps, insulation, windows — see exact ETO + PCEF + federal incentives."
+>
+  <Fragment slot="structured-data">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://kylekanooth.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Rebate Calculator", "item": "https://kylekanooth.com/rebate-calculator/" }
+      ]
+    })} />
+  </Fragment>
+
+  <Nav />
+
+  <main id="main-content" class="min-h-screen bg-[var(--c-bg)]">
+
+    <!-- Page header -->
+    <section class="pt-28 pb-10 px-5 md:px-8 max-w-4xl mx-auto">
+      <p class="text-[#6B8F5E] text-sm font-medium uppercase tracking-widest mb-3">Free Tool</p>
+      <h1 class="font-display text-4xl md:text-5xl font-bold text-[var(--c-text-pri)] leading-tight mb-4">
+        Portland Energy Rebate Calculator
+      </h1>
+      <p class="text-[var(--c-text-sec)] text-lg max-w-2xl leading-relaxed">
+        See exactly which rebates your household qualifies for — ETO, PCEF, and Clark PUD — in under 2 minutes.
+      </p>
+    </section>
+
+    <!-- Calculator wrapper -->
+    <section class="px-5 md:px-8 pb-24 max-w-4xl mx-auto">
+
+      <!-- Progress bar -->
+      <div class="mb-8" aria-label="Calculator progress" role="group">
+        <div class="flex items-center justify-between mb-2">
+          <span id="step-label" class="text-sm font-medium text-[var(--c-text-sec)]">Step 1 of 4</span>
+          <span id="step-name" class="text-sm text-[var(--c-text-mut)]">Location</span>
+        </div>
+        <div class="h-1.5 bg-[var(--c-border)] rounded-full overflow-hidden">
+          <div
+            id="progress-bar"
+            class="h-full bg-[#2D5016] rounded-full transition-all duration-500"
+            style="width: 25%"
+            role="progressbar"
+            aria-valuenow="1"
+            aria-valuemin="1"
+            aria-valuemax="4"
+          ></div>
+        </div>
+      </div>
+
+      <!-- ── STEP 1: Location ── -->
+      <div id="step-1" class="calc-step">
+        <div class="bg-[var(--c-surface)] border border-[var(--c-border)] rounded-2xl p-6 md:p-8">
+          <h2 class="font-display text-2xl font-semibold text-[var(--c-text-pri)] mb-2">Where is your home?</h2>
+          <p class="text-[var(--c-text-sec)] text-sm mb-2">Your location determines which rebate programs are available to you.</p>
+          <p class="text-xs text-[var(--c-text-mut)] mb-6">Not sure where to start? <a href="/energy-assessment" class="underline hover:text-[#2D5016]">Take the 2-min Energy Assessment first</a></p>
+
+          <fieldset class="space-y-3">
+            <legend class="sr-only">Select your location</legend>
+
+            <label class="location-card flex items-start gap-4 p-4 rounded-xl border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)]">
+              <input type="radio" name="location" value="portland" class="mt-1 accent-[#2D5016]" />
+              <div>
+                <div class="font-semibold text-[var(--c-text-pri)] flex items-center gap-2">
+                  <svg aria-hidden="true" class="w-4 h-4 text-[#6B8F5E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Portland Metro (Oregon)
+                </div>
+                <div class="text-sm text-[var(--c-text-sec)] mt-0.5">Unlocks Energy Trust of Oregon (ETO) + PCEF</div>
+              </div>
+            </label>
+
+            <label class="location-card flex items-start gap-4 p-4 rounded-xl border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)]">
+              <input type="radio" name="location" value="clark" class="mt-1 accent-[#2D5016]" />
+              <div>
+                <div class="font-semibold text-[var(--c-text-pri)] flex items-center gap-2">
+                  <svg aria-hidden="true" class="w-4 h-4 text-[#6B8F5E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Clark County (Washington)
+                </div>
+                <div class="text-sm text-[var(--c-text-sec)] mt-0.5">Unlocks Clark Public Utilities rebates</div>
+              </div>
+            </label>
+          </fieldset>
+
+          <!-- Portland sub-question: city limits -->
+          <div id="portland-city-q" class="hidden mt-5 p-4 bg-[rgba(45,80,22,0.04)] border border-[rgba(45,80,22,0.2)] rounded-xl">
+            <p class="text-sm font-medium text-[var(--c-text-pri)] mb-3">Are you within Portland city limits?</p>
+            <div class="flex gap-4">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="portland-city" value="yes" class="accent-[#2D5016]" />
+                <span class="text-sm text-[var(--c-text-sec)]">Yes — I'm in Portland city limits</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="portland-city" value="no" class="accent-[#2D5016]" />
+                <span class="text-sm text-[var(--c-text-sec)]">No — suburb or unincorporated</span>
+              </label>
+            </div>
+            <p class="text-xs text-[var(--c-text-mut)] mt-2">PCEF (Portland Clean Energy Fund) is only available to homes within Portland city limits.</p>
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-4">
+          <button id="step-1-next" class="btn-primary" disabled>
+            Next: Utility Provider
+            <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: Utility + Household ── -->
+      <div id="step-2" class="calc-step hidden">
+        <div class="bg-[var(--c-surface)] border border-[var(--c-border)] rounded-2xl p-6 md:p-8">
+          <h2 class="font-display text-2xl font-semibold text-[var(--c-text-pri)] mb-2">Utility &amp; Household</h2>
+          <p class="text-[var(--c-text-sec)] text-sm mb-6">Some rebates vary by utility provider and income level.</p>
+
+          <div class="space-y-6">
+            <!-- Utility provider -->
+            <div>
+              <label for="utility" class="block text-sm font-medium text-[var(--c-text-pri)] mb-2">Utility Provider</label>
+              <select id="utility" class="calc-select w-full">
+                <option value="">Select your utility…</option>
+                <!-- Portland options injected by JS -->
+              </select>
+            </div>
+
+            <!-- Household size -->
+            <div>
+              <label for="household-size" class="block text-sm font-medium text-[var(--c-text-pri)] mb-2">Household Size</label>
+              <select id="household-size" class="calc-select w-full">
+                <option value="">Select household size…</option>
+                <option value="1">1 person</option>
+                <option value="2">2 people</option>
+                <option value="3">3 people</option>
+                <option value="4">4 people</option>
+                <option value="5">5 people</option>
+                <option value="6">6 people</option>
+                <option value="7">7 people</option>
+                <option value="8">8+ people</option>
+              </select>
+            </div>
+
+            <!-- Income band -->
+            <div>
+              <label class="block text-sm font-medium text-[var(--c-text-pri)] mb-1">Annual Household Income</label>
+              <p id="ami-thresholds" class="text-xs text-[var(--c-text-mut)] mb-3">Select household size to see dollar thresholds</p>
+              <fieldset class="space-y-2">
+                <legend class="sr-only">Select your income band</legend>
+                <label class="income-card flex items-center gap-3 p-3 rounded-lg border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)]">
+                  <input type="radio" name="income" value="lt80" class="accent-[#2D5016]" />
+                  <div>
+                    <span class="text-sm font-medium text-[var(--c-text-pri)]">Under 80% AMI</span>
+                    <span id="income-lt80-label" class="text-xs text-[var(--c-text-mut)] ml-2"></span>
+                  </div>
+                </label>
+                <label class="income-card flex items-center gap-3 p-3 rounded-lg border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)]">
+                  <input type="radio" name="income" value="80to120" class="accent-[#2D5016]" />
+                  <div>
+                    <span class="text-sm font-medium text-[var(--c-text-pri)]">80–120% AMI</span>
+                    <span id="income-80to120-label" class="text-xs text-[var(--c-text-mut)] ml-2"></span>
+                  </div>
+                </label>
+                <label class="income-card flex items-center gap-3 p-3 rounded-lg border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)]">
+                  <input type="radio" name="income" value="120to150" class="accent-[#2D5016]" />
+                  <div>
+                    <span class="text-sm font-medium text-[var(--c-text-pri)]">120–150% AMI</span>
+                    <span id="income-120to150-label" class="text-xs text-[var(--c-text-mut)] ml-2"></span>
+                  </div>
+                </label>
+                <label class="income-card flex items-center gap-3 p-3 rounded-lg border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)]">
+                  <input type="radio" name="income" value="over150" class="accent-[#2D5016]" />
+                  <div>
+                    <span class="text-sm font-medium text-[var(--c-text-pri)]">Over 150% AMI</span>
+                    <span id="income-over150-label" class="text-xs text-[var(--c-text-mut)] ml-2"></span>
+                  </div>
+                </label>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between mt-4">
+          <button class="btn-ghost step-back" data-target="1">
+            <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back
+          </button>
+          <button id="step-2-next" class="btn-primary" disabled>
+            Next: Select Upgrades
+            <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Upgrades ── -->
+      <div id="step-3" class="calc-step hidden">
+        <div class="bg-[var(--c-surface)] border border-[var(--c-border)] rounded-2xl p-6 md:p-8">
+          <h2 class="font-display text-2xl font-semibold text-[var(--c-text-pri)] mb-2">Which upgrades are you considering?</h2>
+          <p class="text-[var(--c-text-sec)] text-sm mb-6">Check everything you're interested in. We'll calculate the rebates for each.</p>
+
+          <div class="grid sm:grid-cols-2 gap-3" id="upgrades-grid">
+
+            <!-- Heat pumps -->
+            <label class="upgrade-card flex items-start gap-3 p-4 rounded-xl border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)]">
+              <input type="checkbox" name="upgrades" value="ductless-hp" class="mt-0.5 accent-[#2D5016]" />
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 font-medium text-[var(--c-text-pri)] text-sm">
+                  <span class="text-lg" aria-hidden="true">🌀</span>
+                  Ductless Heat Pump
+                </div>
+                <div class="text-xs text-[var(--c-text-mut)] mt-0.5">Mini-split system, no ductwork needed</div>
+              </div>
+            </label>
+
+            <label class="upgrade-card flex items-start gap-3 p-4 rounded-xl border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)]">
+              <input type="checkbox" name="upgrades" value="ducted-hp" class="mt-0.5 accent-[#2D5016]" />
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 font-medium text-[var(--c-text-pri)] text-sm">
+                  <span class="text-lg" aria-hidden="true">🌬️</span>
+                  Ducted Heat Pump
+                </div>
+                <div class="text-xs text-[var(--c-text-mut)] mt-0.5">Central system using existing ductwork</div>
+              </div>
+            </label>
+
+            <!-- Heat pump efficiency tier — determines 25C federal tax credit eligibility -->
+            <div class="col-span-2 p-4 rounded-xl border border-[var(--c-border)] bg-[rgba(45,80,22,0.03)]" id="hp-efficiency-wrap">
+              <p class="text-sm font-medium text-[var(--c-text-pri)] mb-3">If selecting a heat pump, what efficiency tier are you targeting?</p>
+              <div class="space-y-2">
+                <label class="flex items-start gap-3 p-3 rounded-lg border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)]">
+                  <input type="radio" name="hp-efficiency" value="standard" class="mt-0.5 accent-[#2D5016]" />
+                  <div>
+                    <span class="text-sm font-medium text-[var(--c-text-pri)]">Standard efficiency</span>
+                    <span class="text-xs text-[var(--c-text-mut)] ml-2">(no federal 25C tax credit)</span>
+                  </div>
+                </label>
+                <label class="flex items-start gap-3 p-3 rounded-lg border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)]">
+                  <input type="radio" name="hp-efficiency" value="high" class="mt-0.5 accent-[#2D5016]" />
+                  <div>
+                    <span class="text-sm font-medium text-[var(--c-text-pri)]">High efficiency</span>
+                    <span class="text-xs text-[var(--c-text-mut)] ml-2">(SEER2 16+ / HSPF2 8.1+ — eligible for 25C tax credit, $2,000 lifetime cap)</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Insulation -->
+            <div class="upgrade-card-wrap">
+              <label class="flex items-start gap-3 p-4 rounded-xl border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)] w-full">
+                <input type="checkbox" name="upgrades" value="attic-insulation" class="mt-0.5 accent-[#2D5016]" />
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 font-medium text-[var(--c-text-pri)] text-sm">
+                    <span class="text-lg" aria-hidden="true">🏠</span>
+                    Attic Insulation
+                  </div>
+                  <div class="text-xs text-[var(--c-text-mut)] mt-0.5">R-value improvement in attic space</div>
+                </div>
+              </label>
+              <div class="sqft-input hidden px-4 pb-4 border border-t-0 border-[#2D5016] rounded-b-xl bg-[rgba(45,80,22,0.04)]" id="attic-sqft-wrap">
+                <label class="block text-xs font-medium text-[var(--c-text-sec)] mb-1 pt-3">Approximate square footage</label>
+                <input type="number" id="attic-sqft" min="100" max="5000" placeholder="e.g. 1200" class="calc-input w-full" />
+              </div>
+            </div>
+
+            <div class="upgrade-card-wrap">
+              <label class="flex items-start gap-3 p-4 rounded-xl border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)] w-full">
+                <input type="checkbox" name="upgrades" value="wall-insulation" class="mt-0.5 accent-[#2D5016]" />
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 font-medium text-[var(--c-text-pri)] text-sm">
+                    <span class="text-lg" aria-hidden="true">🧱</span>
+                    Wall Insulation
+                  </div>
+                  <div class="text-xs text-[var(--c-text-mut)] mt-0.5">Exterior or interior wall cavity insulation</div>
+                </div>
+              </label>
+              <div class="sqft-input hidden px-4 pb-4 border border-t-0 border-[#2D5016] rounded-b-xl bg-[rgba(45,80,22,0.04)]" id="wall-sqft-wrap">
+                <label class="block text-xs font-medium text-[var(--c-text-sec)] mb-1 pt-3">Approximate square footage</label>
+                <input type="number" id="wall-sqft" min="50" max="3000" placeholder="e.g. 800" class="calc-input w-full" />
+              </div>
+            </div>
+
+            <div class="upgrade-card-wrap">
+              <label class="flex items-start gap-3 p-4 rounded-xl border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)] w-full">
+                <input type="checkbox" name="upgrades" value="floor-insulation" class="mt-0.5 accent-[#2D5016]" />
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 font-medium text-[var(--c-text-pri)] text-sm">
+                    <span class="text-lg" aria-hidden="true">🪵</span>
+                    Floor Insulation
+                  </div>
+                  <div class="text-xs text-[var(--c-text-mut)] mt-0.5">Crawl space or subfloor insulation</div>
+                </div>
+              </label>
+              <div class="sqft-input hidden px-4 pb-4 border border-t-0 border-[#2D5016] rounded-b-xl bg-[rgba(45,80,22,0.04)]" id="floor-sqft-wrap">
+                <label class="block text-xs font-medium text-[var(--c-text-sec)] mb-1 pt-3">Approximate square footage</label>
+                <input type="number" id="floor-sqft" min="100" max="4000" placeholder="e.g. 1000" class="calc-input w-full" />
+              </div>
+            </div>
+
+            <!-- Air sealing -->
+            <label class="upgrade-card flex items-start gap-3 p-4 rounded-xl border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)]">
+              <input type="checkbox" name="upgrades" value="air-sealing" class="mt-0.5 accent-[#2D5016]" />
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 font-medium text-[var(--c-text-pri)] text-sm">
+                  <span class="text-lg" aria-hidden="true">🔒</span>
+                  Air Sealing
+                </div>
+                <div class="text-xs text-[var(--c-text-mut)] mt-0.5">Whole-house air leakage reduction</div>
+              </div>
+            </label>
+
+            <!-- Windows -->
+            <div class="upgrade-card-wrap">
+              <label class="flex items-start gap-3 p-4 rounded-xl border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)] w-full">
+                <input type="checkbox" name="upgrades" value="windows" class="mt-0.5 accent-[#2D5016]" />
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 font-medium text-[var(--c-text-pri)] text-sm">
+                    <span class="text-lg" aria-hidden="true">🪟</span>
+                    Windows
+                  </div>
+                  <div class="text-xs text-[var(--c-text-mut)] mt-0.5">Energy-efficient window replacement</div>
+                </div>
+              </label>
+              <div class="sqft-input hidden px-4 pb-4 border border-t-0 border-[#2D5016] rounded-b-xl bg-[rgba(45,80,22,0.04)]" id="windows-sqft-wrap">
+                <label class="block text-xs font-medium text-[var(--c-text-sec)] mb-1 pt-3">Total window area (sq ft)</label>
+                <input type="number" id="windows-sqft" min="20" max="2000" placeholder="e.g. 300" class="calc-input w-full" />
+              </div>
+            </div>
+
+            <!-- Water heater -->
+            <label class="upgrade-card flex items-start gap-3 p-4 rounded-xl border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)]">
+              <input type="checkbox" name="upgrades" value="hpwh" class="mt-0.5 accent-[#2D5016]" />
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 font-medium text-[var(--c-text-pri)] text-sm">
+                  <span class="text-lg" aria-hidden="true">🚿</span>
+                  Heat Pump Water Heater
+                </div>
+                <div class="text-xs text-[var(--c-text-mut)] mt-0.5">Replaces electric or gas water heater</div>
+              </div>
+            </label>
+
+            <!-- Smart thermostat -->
+            <label class="upgrade-card flex items-start gap-3 p-4 rounded-xl border border-[var(--c-border)] cursor-pointer transition-all hover:border-[#6B8F5E] has-[:checked]:border-[#2D5016] has-[:checked]:bg-[rgba(45,80,22,0.06)]">
+              <input type="checkbox" name="upgrades" value="thermostat" class="mt-0.5 accent-[#2D5016]" />
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 font-medium text-[var(--c-text-pri)] text-sm">
+                  <span class="text-lg" aria-hidden="true">📱</span>
+                  Smart Thermostat
+                </div>
+                <div class="text-xs text-[var(--c-text-mut)] mt-0.5">Programmable, connected thermostat</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="flex justify-between mt-4">
+          <button class="btn-ghost step-back" data-target="2">
+            <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back
+          </button>
+          <button id="step-3-next" class="btn-primary" disabled>
+            Calculate My Rebates
+            <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── STEP 4: Results ── -->
+      <div id="step-4" class="calc-step hidden">
+
+        <!-- Print-only header — hidden on screen, visible when printing -->
+        <div class="hidden print:block mb-6 pb-4 border-b border-gray-300">
+          <p class="font-semibold text-gray-800">Rebate Estimate prepared by Kyle Kanooth — kylekanooth.com</p>
+          <p id="print-date" class="text-sm text-gray-600">Generated: </p>
+        </div>
+
+        <!-- Big total -->
+        <div class="bg-[#2D5016] rounded-2xl p-6 md:p-8 mb-6 text-center">
+          <p class="text-[rgba(255,255,255,0.7)] text-sm font-medium uppercase tracking-widest mb-2">Estimated Total Rebates</p>
+          <p id="results-total" class="font-display text-5xl md:text-6xl font-bold text-white mb-2">$0</p>
+          <p class="text-[rgba(255,255,255,0.65)] text-sm" id="results-total-note">Across all programs you qualify for</p>
+        </div>
+
+        <!-- Notices -->
+        <div id="notices-container" class="space-y-3 mb-6"></div>
+
+        <!-- Breakdown table -->
+        <div class="bg-[var(--c-surface)] border border-[var(--c-border)] rounded-2xl overflow-hidden mb-6">
+          <div class="p-4 md:p-6 border-b border-[var(--c-border)]">
+            <h2 class="font-display text-xl font-semibold text-[var(--c-text-pri)]">Rebate Breakdown</h2>
+            <p class="text-sm text-[var(--c-text-sec)] mt-1">Based on your selections. Actual amounts may vary — contact your utility to confirm.</p>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm" id="results-table">
+              <thead>
+                <tr class="border-b border-[var(--c-border)] bg-[rgba(45,80,22,0.04)]">
+                  <th class="text-left p-3 md:p-4 font-semibold text-[var(--c-text-pri)]">Upgrade</th>
+                  <th class="text-right p-3 md:p-4 font-semibold text-[var(--c-text-pri)] whitespace-nowrap" id="col-utility-label">ETO / Clark PUD</th>
+                  <th class="text-right p-3 md:p-4 font-semibold text-[var(--c-text-pri)]" id="col-pcef">PCEF</th>
+                  <th class="text-right p-3 md:p-4 font-semibold text-[var(--c-text-sec)]">Row Total</th>
+                </tr>
+              </thead>
+              <tbody id="results-tbody"></tbody>
+              <tfoot>
+                <tr class="border-t-2 border-[var(--c-border)] bg-[rgba(45,80,22,0.06)]">
+                  <td class="p-3 md:p-4 font-bold text-[var(--c-text-pri)]">Total</td>
+                  <td class="p-3 md:p-4 text-right font-bold text-[var(--c-text-pri)]" id="col-total-utility"></td>
+                  <td class="p-3 md:p-4 text-right font-bold text-[var(--c-text-pri)]" id="col-total-pcef"></td>
+                  <td class="p-3 md:p-4 text-right font-bold text-[#2D5016] text-base" id="col-total-all"></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- Notes / stacking rules -->
+        <div class="bg-[var(--c-surface)] border border-[var(--c-border)] rounded-2xl p-6 mb-6 space-y-4" id="notes-section">
+          <h3 class="font-semibold text-[var(--c-text-pri)]">Important Notes</h3>
+
+          <div class="space-y-3 text-sm text-[var(--c-text-sec)]">
+            <div class="flex gap-2 hidden" id="pcef-note">
+              <svg aria-hidden="true" class="w-4 h-4 mt-0.5 shrink-0 text-[#6B8F5E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+              <p><strong class="text-[var(--c-text-pri)]">PCEF requires Portland city limits.</strong> The Portland Clean Energy Fund is funded by a 1% surcharge on large retailers and is only available for homes inside Portland city limits. Suburbs and unincorporated Multnomah County do not qualify.</p>
+            </div>
+            <div class="flex gap-2">
+              <svg aria-hidden="true" class="w-4 h-4 mt-0.5 shrink-0 text-[#6B8F5E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+              <p><strong class="text-[var(--c-text-pri)]">Rebates can be stacked.</strong> ETO/Clark PUD rebates and PCEF grants can generally be combined on the same project. Some programs require a qualified contractor and pre-approval before work begins.</p>
+            </div>
+            <div class="flex gap-2">
+              <svg aria-hidden="true" class="w-4 h-4 mt-0.5 shrink-0 text-[#6B8F5E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+              <p><strong class="text-[var(--c-text-pri)]">Estimates only.</strong> This calculator uses current published rebate amounts. Final rebate amounts depend on equipment specs, contractor eligibility, and program availability at time of installation. Always confirm amounts with your utility before starting a project.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stacking clarification -->
+        <p class="text-xs text-[var(--c-text-mut)] mb-6 leading-relaxed">
+          ETO + PCEF + Clark PUD rebates generally stack. Federal 25C and 25D tax credits cannot be claimed on equipment already covered by a rebate that exceeds purchase cost — consult IRS guidance.
+        </p>
+
+        <!-- Date reviewed disclaimer -->
+        <p class="text-xs text-[var(--c-text-mut)] mb-6">
+          Rebate amounts last reviewed 2025. Confirm current numbers with each program before relying on this estimate.
+        </p>
+
+        <!-- CTA -->
+        <div class="bg-[var(--c-surface)] border border-[rgba(45,80,22,0.3)] rounded-2xl p-6 md:p-8 text-center">
+          <h3 class="font-display text-2xl font-semibold text-[var(--c-text-pri)] mb-2">Ready to get started?</h3>
+          <p class="text-[var(--c-text-sec)] mb-6 max-w-md mx-auto">Let's talk about your home, confirm your eligibility, and map out a project plan that maximizes your rebates.</p>
+          <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="/#contact" class="btn-primary">
+              Let's talk about your home
+              <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button onclick="window.print()" class="btn-ghost">
+              <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              Print / Save PDF
+            </button>
+            <!-- TODO: implement "Email me this estimate" mailto button — pre-fill subject/body with selections + totals -->
+          </div>
+        </div>
+
+        <div class="flex justify-start mt-4">
+          <button id="start-over" class="btn-ghost">
+            <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+            Start over
+          </button>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* Form controls */
+  .calc-select {
+    background: var(--c-bg);
+    border: 1px solid var(--c-border);
+    border-radius: 0.75rem;
+    color: var(--c-text-pri);
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    transition: border-color 180ms;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23A8A29E' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+  }
+  .calc-select:focus { border-color: #2D5016; outline: none; }
+  .calc-select option { background: var(--c-surface); }
+
+  .calc-input {
+    background: var(--c-bg);
+    border: 1px solid var(--c-border);
+    border-radius: 0.5rem;
+    color: var(--c-text-pri);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    transition: border-color 180ms;
+  }
+  .calc-input:focus { border-color: #2D5016; outline: none; }
+
+  /* Step transitions */
+  .calc-step { animation: stepIn 280ms ease both; }
+  @keyframes stepIn { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
+
+  /* Results table row alternation */
+  #results-tbody tr:nth-child(even) { background: rgba(45,80,22,0.03); }
+  #results-tbody tr td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--c-border); }
+  #results-tbody tr:last-child td { border-bottom: none; }
+
+  /* Print styles */
+  @media print {
+    #step-1, #step-2, #step-3, .step-back, #start-over, header, .skip-link, footer { display: none !important; }
+    #step-4 { display: block !important; }
+    .btn-primary, .btn-ghost { display: none !important; }
+    .hidden.print\:block { display: block !important; }
+  }
+
+  /* Upgrade card full-width variant */
+  .upgrade-card-wrap { display: contents; }
+  @media (min-width: 640px) {
+    .upgrade-card-wrap { display: flex; flex-direction: column; }
+  }
+
+  /* Disabled button state */
+  button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+</style>
+
+<script>
+(function () {
+  // ── Rebate Data ──────────────────────────────────────────────────────────
+
+  const UTILITY_OPTIONS = {
+    portland: ['PGE', 'Pacific Power', 'NW Natural', 'Cascade Natural Gas'],
+    clark:    ['Clark Public Utilities'],
+  };
+
+  // Portland Metro AMI thresholds (2024 HUD, 4-person household base)
+  // Indexed by household size 1-8
+  const AMI_80 = {
+    1: 56_600, 2: 64_700, 3: 72_750, 4: 80_850, 5: 87_300, 6: 93_800, 7: 100_250, 8: 106_700
+  };
+
+
+  // REVIEW 2026: confirm against eto.org / pcef / Clark PUD published rates
+  // Energy Trust of Oregon — standard rebates
+  const ETO_STANDARD = {
+    'ductless-hp':      { type: 'flat',    amount: 800,   label: 'Ductless HP' },
+    'ducted-hp':        { type: 'flat',    amount: 1000,  label: 'Ducted HP' },
+    'attic-insulation': { type: 'per-sqft', rate: 1.25,   label: 'Attic Insulation' },
+    'wall-insulation':  { type: 'per-sqft', rate: 1.50,   label: 'Wall Insulation' },
+    'floor-insulation': { type: 'per-sqft', rate: 0.75,   label: 'Floor Insulation' },
+    'air-sealing':      { type: 'flat',    amount: 0,     label: 'Air Sealing' }, // ETO bundles with insulation
+    'windows':          { type: 'per-sqft', rate: 1.25,   label: 'Windows' },   // mid Tier1/Tier2 avg
+    'hpwh':             { type: 'flat',    amount: 950,   label: 'HPWH' },      // mid $700–1200
+    'thermostat':       { type: 'flat',    amount: 100,   label: 'Smart Thermostat' },
+  };
+
+  // REVIEW 2026: confirm against eto.org / pcef / Clark PUD published rates
+  // ETO Savings Within Reach (income-qualified: under 80% AMI)
+  const ETO_SWR = {
+    'ductless-hp':      { type: 'flat',    amount: 1800,  label: 'Ductless HP' },
+    'ducted-hp':        { type: 'flat',    amount: 3000,  label: 'Ducted HP' },
+    'attic-insulation': { type: 'per-sqft', rate: 1.50,   label: 'Attic Insulation' },
+    'wall-insulation':  { type: 'per-sqft', rate: 2.25,   label: 'Wall Insulation' },
+    'floor-insulation': { type: 'per-sqft', rate: 1.00,   label: 'Floor Insulation' },
+    'air-sealing':      { type: 'flat',    amount: 0,     label: 'Air Sealing' },
+    'windows':          { type: 'per-sqft', rate: 1.25,   label: 'Windows' },
+    'hpwh':             { type: 'flat',    amount: 950,   label: 'HPWH' },
+    'thermostat':       { type: 'flat',    amount: 100,   label: 'Smart Thermostat' },
+  };
+
+  // REVIEW 2026: confirm against eto.org / pcef / Clark PUD published rates
+  // Clark PUD rebates
+  const CLARK_PUD = {
+    'ductless-hp':      { type: 'flat',    amount: 900,   label: 'Ductless HP' },
+    'ducted-hp':        { type: 'flat',    amount: 1125,  label: 'Ducted HP' },   // avg variable-speed
+    'attic-insulation': { type: 'per-sqft', rate: 0.75,   label: 'Attic Insulation' },
+    'wall-insulation':  { type: 'per-sqft', rate: 1.20,   label: 'Wall Insulation' },
+    'floor-insulation': { type: 'per-sqft', rate: 0.75,   label: 'Floor Insulation' },
+    'air-sealing':      { type: 'flat',    amount: 300,   label: 'Air Sealing' },
+    'windows':          { type: 'per-sqft', rate: 8,      label: 'Windows' },     // mid $6–10
+    'hpwh':             { type: 'flat',    amount: 1500,  label: 'HPWH' },
+    'thermostat':       { type: 'flat',    amount: 140,   label: 'Smart Thermostat' },
+  };
+
+  // REVIEW 2026: confirm against eto.org / pcef / Clark PUD published rates
+  // PCEF caps by income band (Portland city limits only, not eligible over 150% AMI)
+  const PCEF_CAPS = {
+    lt80:     50_000,
+    '80to120': 30_000,
+    '120to150': 15_000,
+    over150:   0,
+  };
+
+  // ── State ────────────────────────────────────────────────────────────────
+  const state = {
+    location: '',
+    portlandCity: '',
+    utility: '',
+    householdSize: '',
+    income: '',
+    upgrades: new Set(),
+    sqft: {},
+  };
+
+  // ── DOM references ────────────────────────────────────────────────────────
+  const steps     = [1, 2, 3, 4].map(n => document.getElementById(`step-${n}`));
+  const progressBar  = document.getElementById('progress-bar');
+  const stepLabel    = document.getElementById('step-label');
+  const stepName     = document.getElementById('step-name');
+  const stepNames    = ['Location', 'Utility & Household', 'Select Upgrades', 'Results'];
+
+  let currentStep = 1;
+
+  // ── Navigation helpers ────────────────────────────────────────────────────
+  function goToStep(n) {
+    steps.forEach((el, i) => {
+      if (!el) return;
+      el.classList.toggle('hidden', i + 1 !== n);
+    });
+    currentStep = n;
+    const pct = Math.round((n / 4) * 100);
+    progressBar.style.width = pct + '%';
+    progressBar.setAttribute('aria-valuenow', String(n));
+    stepLabel.textContent = `Step ${n} of 4`;
+    stepName.textContent  = stepNames[n - 1];
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (n === 4) renderResults();
+  }
+
+  // Back buttons
+  document.querySelectorAll('.step-back').forEach(btn => {
+    btn.addEventListener('click', () => goToStep(parseInt(btn.dataset.target)));
+  });
+
+  document.getElementById('start-over').addEventListener('click', () => {
+    // Reset state
+    Object.assign(state, { location: '', portlandCity: '', utility: '', householdSize: '', income: '', upgrades: new Set(), sqft: {} });
+    hpEfficiency = 'standard';
+    document.querySelectorAll('input[type=radio]').forEach(r => r.checked = false);
+    document.querySelectorAll('input[type=checkbox]').forEach(c => c.checked = false);
+    document.querySelectorAll('.sqft-input').forEach(d => d.classList.add('hidden'));
+    document.querySelectorAll('input[type=number]').forEach(i => i.value = '');
+    document.getElementById('portland-city-q').classList.add('hidden');
+    document.getElementById('step-1-next').disabled = true;
+    goToStep(1);
+  });
+
+  // ── STEP 1 logic ─────────────────────────────────────────────────────────
+  const locationRadios = document.querySelectorAll('input[name=location]');
+  const portlandCityQ  = document.getElementById('portland-city-q');
+  const portlandCityRadios = document.querySelectorAll('input[name=portland-city]');
+  const step1Next = document.getElementById('step-1-next');
+
+  const checkStep1Valid = () => {
+    if (!state.location) { step1Next.disabled = true; return; }
+    if (state.location === 'portland' && !state.portlandCity) { step1Next.disabled = true; return; }
+    step1Next.disabled = false;
+  };
+
+  locationRadios.forEach(r => {
+    r.addEventListener('change', () => {
+      state.location = r.value;
+      portlandCityQ.classList.toggle('hidden', r.value !== 'portland');
+      if (r.value !== 'portland') state.portlandCity = 'no'; // clark county implicitly
+      populateUtilities();
+      checkStep1Valid();
+    });
+  });
+
+  portlandCityRadios.forEach(r => {
+    r.addEventListener('change', () => {
+      state.portlandCity = r.value;
+      checkStep1Valid();
+    });
+  });
+
+  step1Next.addEventListener('click', () => goToStep(2));
+
+  // ── STEP 2 logic ─────────────────────────────────────────────────────────
+  const utilitySelect   = document.getElementById('utility');
+  const householdSelect = document.getElementById('household-size');
+  const incomeRadios    = document.querySelectorAll('input[name=income]');
+  const step2Next       = document.getElementById('step-2-next');
+
+  function populateUtilities() {
+    const opts = UTILITY_OPTIONS[state.location] || [];
+    utilitySelect.innerHTML = '<option value="">Select your utility…</option>' +
+      opts.map(o => `<option value="${o}">${o}</option>`).join('');
+    state.utility = '';
+    checkStep2Valid();
+  }
+
+  function checkStep2Valid() {
+    step2Next.disabled = !(state.utility && state.householdSize && state.income);
+  }
+
+  utilitySelect.addEventListener('change', () => {
+    state.utility = utilitySelect.value;
+    checkStep2Valid();
+  });
+
+  householdSelect.addEventListener('change', () => {
+    state.householdSize = householdSelect.value;
+    updateAmiLabels();
+    checkStep2Valid();
+  });
+
+  incomeRadios.forEach(r => {
+    r.addEventListener('change', () => {
+      state.income = r.value;
+      checkStep2Valid();
+    });
+  });
+
+  step2Next.addEventListener('click', () => goToStep(3));
+
+  function fmt(n) { return n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }); }
+
+  function updateAmiLabels() {
+    const sz = parseInt(state.householdSize) || 4;
+    const lt80  = AMI_80[sz]  || AMI_80[4];
+    const at120 = Math.round(lt80 * 1.5);
+    const at150 = Math.round(lt80 * 1.875);
+
+    document.getElementById('income-lt80-label').textContent    = `(under ${fmt(lt80)})`;
+    document.getElementById('income-80to120-label').textContent = `(${fmt(lt80)} – ${fmt(at120)})`;
+    document.getElementById('income-120to150-label').textContent= `(${fmt(at120)} – ${fmt(at150)})`;
+    document.getElementById('income-over150-label').textContent  = `(over ${fmt(at150)})`;
+  }
+
+  // ── STEP 3 logic ─────────────────────────────────────────────────────────
+  const upgradeCheckboxes = document.querySelectorAll('input[name=upgrades]');
+  const step3Next = document.getElementById('step-3-next');
+  const hpEfficiencyRadios = document.querySelectorAll('input[name=hp-efficiency]');
+
+  // Track heat pump efficiency selection for 25C federal credit
+  let hpEfficiency = 'standard'; // default: no 25C credit
+  hpEfficiencyRadios.forEach(r => {
+    r.addEventListener('change', () => { hpEfficiency = r.value; });
+  });
+
+  const sqftUpgrades = ['attic-insulation', 'wall-insulation', 'floor-insulation', 'windows'];
+  const sqftWrapIds  = {
+    'attic-insulation': 'attic-sqft-wrap',
+    'wall-insulation':  'wall-sqft-wrap',
+    'floor-insulation': 'floor-sqft-wrap',
+    'windows':          'windows-sqft-wrap',
+  };
+
+  const hpUpgrades = ['ductless-hp', 'ducted-hp'];
+
+  function checkStep3Valid() {
+    if (state.upgrades.size === 0) {
+      step3Next.disabled = true;
+      return;
+    }
+    step3Next.disabled = false;
+  }
+
+  upgradeCheckboxes.forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (cb.checked) {
+        state.upgrades.add(cb.value);
+      } else {
+        state.upgrades.delete(cb.value);
+      }
+
+      // Show/hide sqft inputs
+      if (sqftUpgrades.includes(cb.value)) {
+        const wrap = document.getElementById(sqftWrapIds[cb.value]);
+        if (wrap) wrap.classList.toggle('hidden', !cb.checked);
+      }
+
+      checkStep3Valid();
+    });
+  });
+
+  // Capture sqft values
+  ['attic', 'wall', 'floor', 'windows'].forEach(key => {
+    const input = document.getElementById(`${key}-sqft`);
+    if (input) {
+      input.addEventListener('input', () => {
+        state.sqft[key === 'windows' ? 'windows' : `${key}-insulation`] = parseFloat(input.value) || 0;
+      });
+    }
+  });
+
+  step3Next.addEventListener('click', () => {
+    if (state.upgrades.size === 0) {
+      // Show inline validation message
+      let msg = document.getElementById('step3-validation-msg');
+      if (!msg) {
+        msg = document.createElement('p');
+        msg.id = 'step3-validation-msg';
+        msg.className = 'text-sm text-red-600 mt-2 text-right';
+        step3Next.parentElement.appendChild(msg);
+      }
+      msg.textContent = 'No upgrades selected — go back and choose at least one item.';
+      return;
+    }
+    // Clear any previous validation message
+    const msg = document.getElementById('step3-validation-msg');
+    if (msg) msg.textContent = '';
+    goToStep(4);
+  });
+
+  // ── Results rendering ─────────────────────────────────────────────────────
+  function calcUtilityRebate(upgrade) {
+    // REVIEW 2026: confirm ETO_STANDARD, ETO_SWR, and CLARK_PUD amounts against eto.org / pcef / Clark PUD published rates
+    const table = state.location === 'clark' ? CLARK_PUD
+                : state.income === 'lt80'    ? ETO_SWR
+                :                              ETO_STANDARD;
+    const entry = table[upgrade];
+    if (!entry) return 0;
+    if (entry.type === 'flat') return entry.amount;
+    if (entry.type === 'per-sqft') {
+      // Map upgrade key to sqft state key
+      const sqftKey = upgrade; // they match: 'attic-insulation' etc.
+      const sqft = state.sqft[sqftKey] || 0;
+      return Math.round(entry.rate * sqft);
+    }
+    return 0;
+  }
+
+  function calcPcefRebate() {
+    // PCEF is suppressed for over-150% AMI — PCEF_CAPS['over150'] === 0 handles this.
+    // state.income === 'over150' returns 0 via PCEF_CAPS lookup, so no additional gate needed.
+    if (state.location !== 'portland') return 0;
+    if (state.portlandCity !== 'yes')  return 0;
+    // REVIEW 2026: confirm PCEF_CAPS amounts against pcef published rates
+    return PCEF_CAPS[state.income] || 0;
+  }
+
+  // IRA 25C federal tax credit for high-efficiency heat pumps
+  // $2,000 lifetime cap; requires SEER2 >= 16 for split-system / HSPF2 >= 8.1
+  // REVIEW 2026: confirm 25C cap and equipment spec requirements against IRS guidance / IRA updates
+  const FED_25C_AMOUNT = 2000;
+
+  function calc25CCredit() {
+    if (hpEfficiency !== 'high') return 0;
+    const hasHp = [...state.upgrades].some(u => hpUpgrades.includes(u));
+    if (!hasHp) return 0;
+    return FED_25C_AMOUNT;
+  }
+
+  function renderResults() {
+    const upgrades = [...state.upgrades];
+    const isClark  = state.location === 'clark';
+    // PCEF is suppressed when state.income === 'over150' because PCEF_CAPS['over150'] === 0
+    const hasPcef  = state.location === 'portland' && state.portlandCity === 'yes' && PCEF_CAPS[state.income] > 0;
+
+    // Update column header
+    document.getElementById('col-utility-label').textContent = isClark ? 'Clark PUD' : 'Energy Trust';
+    document.getElementById('col-pcef').textContent = hasPcef ? 'PCEF' : '—';
+    document.getElementById('col-pcef').classList.toggle('opacity-40', !hasPcef);
+
+    // PCEF note visibility
+    document.getElementById('pcef-note').classList.toggle('hidden',
+      !(state.location === 'portland'));
+
+    let totalUtility = 0;
+    const pcefCap = calcPcefRebate();
+    const credit25c = calc25CCredit();
+
+    const tbody = document.getElementById('results-tbody');
+    tbody.innerHTML = '';
+
+    // Build per-upgrade rows
+    upgrades.forEach(upgrade => {
+      const uRebate = calcUtilityRebate(upgrade);
+
+      totalUtility += uRebate;
+
+      const upgradeLabel = ETO_STANDARD[upgrade]?.label || upgrade;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="font-medium text-[var(--c-text-pri)]">${upgradeLabel}</td>
+        <td class="text-right text-[var(--c-text-sec)]">${uRebate > 0 ? fmt(uRebate) : '<span class="text-[var(--c-text-mut)]">—</span>'}</td>
+        <td class="text-right text-[var(--c-text-sec)]">—</td>
+        <td class="text-right font-semibold text-[var(--c-text-pri)]">${uRebate > 0 ? fmt(uRebate) : '—'}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // PCEF row (lump sum if eligible; suppressed when over150 AMI)
+    if (hasPcef) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="font-medium text-[var(--c-text-pri)]">PCEF Grant (project total)</td>
+        <td class="text-right text-[var(--c-text-mut)]">—</td>
+        <td class="text-right font-semibold text-[#2D5016]">Up to ${fmt(pcefCap)}</td>
+        <td class="text-right font-semibold text-[var(--c-text-pri)]">Up to ${fmt(pcefCap)}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    // Federal 25C tax credit row — only if high-efficiency heat pump selected
+    if (credit25c > 0) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="font-medium text-[var(--c-text-pri)]">Federal 25C Tax Credit <span class="text-xs text-[var(--c-text-mut)] font-normal">(SEER2 16+/HSPF2 8.1+, $2,000 lifetime cap)</span></td>
+        <td class="text-right text-[var(--c-text-mut)]">—</td>
+        <td class="text-right text-[var(--c-text-mut)]">—</td>
+        <td class="text-right font-semibold text-[var(--c-text-pri)]">${fmt(credit25c)}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    const grandTotal = totalUtility + pcefCap + credit25c;
+
+    document.getElementById('col-total-utility').textContent = fmt(totalUtility);
+    document.getElementById('col-total-pcef').textContent    = hasPcef ? `Up to ${fmt(pcefCap)}` : '—';
+    document.getElementById('col-total-all').textContent = fmt(grandTotal);
+
+    // Big number
+    document.getElementById('results-total').textContent = fmt(grandTotal);
+
+    // Notices
+    const noticesContainer = document.getElementById('notices-container');
+    noticesContainer.innerHTML = '';
+
+    if (state.income === 'over150' && state.location === 'portland') {
+      noticesContainer.innerHTML += `
+        <div class="flex gap-3 p-4 rounded-xl bg-[rgba(217,119,6,0.07)] border border-[rgba(217,119,6,0.25)]">
+          <svg class="w-5 h-5 text-[#D97706] shrink-0 mt-0.5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <p class="text-sm text-[var(--c-text-sec)]"><strong class="text-[var(--c-text-pri)]">PCEF not available at your income level.</strong> Portland Clean Energy Fund requires household income at or below 150% AMI. You may still qualify for standard ETO rebates.</p>
+        </div>`;
+    }
+
+    if (upgrades.length === 0) {
+      noticesContainer.innerHTML += `
+        <div class="p-4 rounded-xl bg-[rgba(45,80,22,0.06)] border border-[rgba(45,80,22,0.2)]">
+          <p class="text-sm text-[var(--c-text-sec)]">No upgrades selected. Go back and check the ones you're interested in.</p>
+        </div>`;
+    }
+
+    // Populate print-only header date
+    const printDateEl = document.getElementById('print-date');
+    if (printDateEl) {
+      const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      printDateEl.textContent = `Generated: ${today}`;
+    }
+  }
+
+  // ── Initialise ────────────────────────────────────────────────────────────
+  populateUtilities();
+  updateAmiLabels();
+})();
+</script>

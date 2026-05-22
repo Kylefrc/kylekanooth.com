@@ -1,0 +1,180 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Now — What Kyle Kanooth Is Working On"
+  description="What I'm focused on right now: Portland energy retrofits, SnuggSpec pilots, AI automation builds, and Scraping School content."
+>
+  <Fragment slot="structured-data">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://kylekanooth.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Now", "item": "https://kylekanooth.com/now/" }
+      ]
+    })} />
+  </Fragment>
+
+  <Nav />
+
+  <main id="main-content" class="pt-20 min-h-screen bg-[var(--c-bg)]">
+    <div class="max-w-6xl mx-auto px-5 md:px-8 py-20 md:py-28">
+
+      <!-- Header -->
+      <div class="max-w-2xl mb-16 reveal">
+        <span class="tag mb-4 inline-block">/now</span>
+        <h1 class="font-display text-4xl md:text-5xl font-semibold text-[var(--c-text-pri)] mb-4 leading-tight">
+          What I'm Doing Now
+        </h1>
+        <p class="text-[var(--c-text-sec)] text-lg leading-relaxed">
+          A snapshot of where my attention actually is. Updated manually when things shift.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8 items-start">
+
+        <!-- Main content -->
+        <div class="md:col-span-2 space-y-10">
+
+          <!-- Right now -->
+          <section aria-labelledby="right-now-heading" class="reveal" data-delay="1">
+            <h2 id="right-now-heading" class="font-display text-2xl font-semibold text-[var(--c-text-pri)] mb-6 flex items-center gap-3">
+              <span class="w-2 h-2 rounded-full bg-[#6B8F5E] inline-block flex-shrink-0 mt-0.5" aria-hidden="true"></span>
+              Right now
+            </h2>
+            <ul class="space-y-4" role="list">
+              <li class="flex gap-4 items-start">
+                <span class="mt-1 w-5 h-5 rounded-full bg-[rgba(45,80,22,0.15)] flex-shrink-0 flex items-center justify-center text-[#6B8F5E] text-xs font-bold" aria-hidden="true">1</span>
+                <div>
+                  <p class="font-medium text-[var(--c-text-pri)] leading-snug">Closing 50+ Portland retrofit jobs per year</p>
+                  <p class="text-sm text-[var(--c-text-sec)] mt-0.5">Sales manager at Resilient Retrofits — heat pumps, insulation, weatherization, and electrical under the Energy Friendly Homes program.</p>
+                </div>
+              </li>
+              <li class="flex gap-4 items-start">
+                <span class="mt-1 w-5 h-5 rounded-full bg-[rgba(45,80,22,0.15)] flex-shrink-0 flex items-center justify-center text-[#6B8F5E] text-xs font-bold" aria-hidden="true">2</span>
+                <div>
+                  <p class="font-medium text-[var(--c-text-pri)] leading-snug">Building SnuggSpec</p>
+                  <p class="text-sm text-[var(--c-text-sec)] mt-0.5">A spec-generation tool for Snugg Pro scopes — eliminating manual data entry between audits and proposals.</p>
+                </div>
+              </li>
+              <li class="flex gap-4 items-start">
+                <span class="mt-1 w-5 h-5 rounded-full bg-[rgba(45,80,22,0.15)] flex-shrink-0 flex items-center justify-center text-[#6B8F5E] text-xs font-bold" aria-hidden="true">3</span>
+                <div>
+                  <p class="font-medium text-[var(--c-text-pri)] leading-snug">Momentum Dash — Milestone 3</p>
+                  <p class="text-sm text-[var(--c-text-sec)] mt-0.5">Personal ops dashboard. M1 and M2 shipped. M3 is active development — KPI tracking and habit check-in layers.</p>
+                </div>
+              </li>
+              <li class="flex gap-4 items-start">
+                <span class="mt-1 w-5 h-5 rounded-full bg-[rgba(45,80,22,0.15)] flex-shrink-0 flex items-center justify-center text-[#6B8F5E] text-xs font-bold" aria-hidden="true">4</span>
+                <div>
+                  <p class="font-medium text-[var(--c-text-pri)] leading-snug">Scraping School — Module 05</p>
+                  <p class="text-sm text-[var(--c-text-sec)] mt-0.5">Writing curriculum for a practical web scraping course. M1–M4 done. M05 is next: dynamic content and anti-bot handling.</p>
+                </div>
+              </li>
+              <li class="flex gap-4 items-start">
+                <span class="mt-1 w-5 h-5 rounded-full bg-[rgba(45,80,22,0.15)] flex-shrink-0 flex items-center justify-center text-[#6B8F5E] text-xs font-bold" aria-hidden="true">5</span>
+                <div>
+                  <p class="font-medium text-[var(--c-text-pri)] leading-snug">Nightly overnight automation</p>
+                  <p class="text-sm text-[var(--c-text-sec)] mt-0.5">Agents run while I sleep — pipeline prep, ST data syncs, and reporting that's ready at 7am.</p>
+                </div>
+              </li>
+              <li class="flex gap-4 items-start">
+                <span class="mt-1 w-5 h-5 rounded-full bg-[rgba(45,80,22,0.15)] flex-shrink-0 flex items-center justify-center text-[#6B8F5E] text-xs font-bold" aria-hidden="true">6</span>
+                <div>
+                  <p class="font-medium text-[var(--c-text-pri)] leading-snug">Reading: <em>Working in Public</em> by Nadia Eghbal</p>
+                  <p class="text-sm text-[var(--c-text-sec)] mt-0.5">On open source maintenance and the economics of digital infrastructure. On deck: <em>The Mom Test</em>.</p>
+                </div>
+              </li>
+            </ul>
+          </section>
+
+          <!-- Divider -->
+          <hr class="border-[var(--c-border)]" aria-hidden="true" />
+
+          <!-- This quarter -->
+          <section aria-labelledby="quarter-heading" class="reveal" data-delay="2">
+            <h2 id="quarter-heading" class="font-display text-2xl font-semibold text-[var(--c-text-pri)] mb-6 flex items-center gap-3">
+              <span class="w-2 h-2 rounded-full bg-[rgba(107,143,94,0.5)] inline-block flex-shrink-0 mt-0.5" aria-hidden="true"></span>
+              This quarter — 2026 Q2
+            </h2>
+            <ul class="space-y-4" role="list">
+              <li class="flex gap-4 items-start">
+                <svg aria-hidden="true" class="w-5 h-5 flex-shrink-0 mt-0.5 text-[#6B8F5E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <p class="text-[var(--c-text-sec)]">Ship SnuggSpec v1 to at least 3 internal users and get real workflow feedback before a wider release.</p>
+              </li>
+              <li class="flex gap-4 items-start">
+                <svg aria-hidden="true" class="w-5 h-5 flex-shrink-0 mt-0.5 text-[#6B8F5E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <p class="text-[var(--c-text-sec)]">Finish Momentum Dash M3 — daily KPI logging and the habit check-in layer running end-to-end.</p>
+              </li>
+              <li class="flex gap-4 items-start">
+                <svg aria-hidden="true" class="w-5 h-5 flex-shrink-0 mt-0.5 text-[#6B8F5E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <p class="text-[var(--c-text-sec)]">Complete Scraping School modules M05–M07 and open a waitlist for early access students.</p>
+              </li>
+              <li class="flex gap-4 items-start">
+                <svg aria-hidden="true" class="w-5 h-5 flex-shrink-0 mt-0.5 text-[#6B8F5E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <p class="text-[var(--c-text-sec)]">Hire one more crew lead at Resilient Retrofits to handle the summer volume surge.</p>
+              </li>
+            </ul>
+          </section>
+
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="md:col-span-1 reveal" data-delay="3">
+          <div class="rounded-2xl border border-[var(--c-border)] bg-[var(--c-surface)] p-6 sticky top-28">
+
+            <!-- Last updated -->
+            <div class="mb-6 pb-6 border-b border-[var(--c-border)]">
+              <p class="text-xs font-semibold uppercase tracking-widest text-[var(--c-text-mut)] mb-1">Last updated</p>
+              <time datetime="2026-05-20" class="text-[var(--c-text-pri)] font-medium">May 20, 2026</time>
+            </div>
+
+            <!-- Location -->
+            <div class="mb-6 pb-6 border-b border-[var(--c-border)]">
+              <p class="text-xs font-semibold uppercase tracking-widest text-[var(--c-text-mut)] mb-1">Location</p>
+              <p class="text-[var(--c-text-sec)] text-sm">Portland, Oregon</p>
+            </div>
+
+            <!-- About /now pages -->
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-widest text-[var(--c-text-mut)] mb-2">What is a /now page?</p>
+              <p class="text-[var(--c-text-sec)] text-sm leading-relaxed">
+                A /now page tells you what someone is focused on at this point in their life — different from an About page, which is more static.
+              </p>
+              <a
+                href="https://nownownow.com/about"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-3 inline-flex items-center gap-1.5 text-sm text-[#6B8F5E] hover:text-[#2D5016] transition-colors"
+                aria-label="Learn more about /now pages on nownownow.com (opens in new tab)"
+              >
+                nownownow.com
+                <svg aria-hidden="true" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+              </a>
+            </div>
+
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

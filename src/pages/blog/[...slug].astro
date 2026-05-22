@@ -20,13 +20,17 @@ function formatDate(date: Date): string {
 const publishedTime = post.data.date.toISOString();
 const siteUrl = 'https://kylekanooth.com';
 const postUrl = `${siteUrl}/blog/${post.slug}`;
+const articleImage = post.data.ogImage
+  ? (post.data.ogImage.startsWith('http') ? post.data.ogImage : `${siteUrl}${post.data.ogImage}`)
+  : `${siteUrl}/og-image.png`;
 
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
-  '@type': 'BlogPosting',
+  '@type': 'Article',
   headline: post.data.title,
   description: post.data.description,
   datePublished: publishedTime,
+  image: articleImage,
   author: {
     '@type': 'Person',
     name: 'Kyle Kanooth',
@@ -51,7 +55,7 @@ const jsonLd = JSON.stringify({
     author: 'Kyle Kanooth',
   }}
 >
-  <Fragment slot="head">
+  <Fragment slot="structured-data">
     <script type="application/ld+json" set:html={jsonLd} />
   </Fragment>
 
@@ -139,7 +143,7 @@ const jsonLd = JSON.stringify({
           </svg>
           Back to all posts
         </a>
-        <a href="/#contact" class="text-cyan text-sm font-medium hover:text-cyanLt transition-colors">
+        <a href="/#contact" class="text-green text-sm font-medium hover:text-greenLt transition-colors">
           Get in touch &rarr;
         </a>
       </div>
@@ -168,7 +172,7 @@ const jsonLd = JSON.stringify({
   .prose-blog :global(h2),
   .prose-blog :global(h3),
   .prose-blog :global(h4) {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: 'Fraunces', serif;
     font-weight: 600;
     color: var(--c-text-pri);
     margin-top: 2.5rem;
@@ -190,13 +194,13 @@ const jsonLd = JSON.stringify({
   }
 
   .prose-blog :global(a) {
-    color: #22d3ee;
+    color: #2D5016;
     text-decoration: underline;
     text-underline-offset: 3px;
     transition: color 150ms ease;
   }
   .prose-blog :global(a:hover) {
-    color: #67e8f9;
+    color: #6B8F5E;
   }
 
   .prose-blog :global(ul),
@@ -213,7 +217,7 @@ const jsonLd = JSON.stringify({
   }
 
   .prose-blog :global(blockquote) {
-    border-left: 3px solid #22d3ee;
+    border-left: 3px solid #2D5016;
     padding-left: 1.25rem;
     margin: 1.5rem 0;
     color: var(--c-text-mut);
@@ -226,7 +230,7 @@ const jsonLd = JSON.stringify({
     border: 1px solid var(--c-border);
     border-radius: 4px;
     padding: 0.15em 0.4em;
-    color: #a5f3fc;
+    color: #7DA86E;
   }
 
   .prose-blog :global(pre) {

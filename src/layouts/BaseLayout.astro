@@ -7,6 +7,7 @@ interface Props {
   canonicalUrl?: string;
   ogImage?: string;
   ogType?: string;
+  isHome?: boolean;
   article?: {
     publishedTime?: string;
     author?: string;
@@ -19,6 +20,7 @@ const {
   canonicalUrl = Astro.url.href,
   ogImage = '/og-image.png',
   ogType = 'website',
+  isHome = Astro.url.pathname === '/',
   article,
 } = Astro.props;
 
@@ -32,7 +34,7 @@ const fullOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="dark light" />
-  <meta name="theme-color" content="#0a0a0a" id="theme-color-meta" />
+  <meta name="theme-color" content="#1C1917" id="theme-color-meta" />
 
   <title>{title}</title>
   <meta name="description" content={description} />
@@ -71,9 +73,49 @@ const fullOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet" />
 
   <slot name="head" />
+  <slot name="structured-data" />
+
+  {isHome && (
+    <>
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Kyle Kanooth",
+        "jobTitle": "Energy Efficiency Consultant and Software Builder",
+        "url": "https://kylekanooth.com/",
+        "email": "kyle.kanooth@gmail.com",
+        "image": "https://kylekanooth.com/kyle-headshot.jpg",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Portland",
+          "addressRegion": "OR",
+          "addressCountry": "US"
+        },
+        "sameAs": [
+          "https://linkedin.com/in/kyle-kanooth",
+          "https://github.com/kylekanooth"
+        ],
+        "knowsAbout": [
+          "Energy Efficiency", "AI Automation", "Software Development",
+          "Python", "TypeScript", "React", "FastAPI", "Technical Recruiting"
+        ]
+      })} />
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Kyle Kanooth",
+        "url": "https://kylekanooth.com",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://kylekanooth.com/blog?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      })} />
+    </>
+  )}
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -97,7 +139,7 @@ const fullOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}
         root.classList.remove('light');
       }
       const meta = document.querySelector('#theme-color-meta');
-      if (meta) meta.content = theme === 'light' ? '#f8f9fb' : '#0a0a0a';
+      if (meta) meta.content = theme === 'light' ? '#FAF8F5' : '#1C1917';
       try { localStorage.setItem('kk-theme', theme); } catch (_) {}
     };
 

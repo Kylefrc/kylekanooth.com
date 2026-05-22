@@ -1,0 +1,252 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface ResourceLink {
+  title: string;
+  href: string;
+  description: string;
+  badge?: string;
+}
+
+interface ResourceSection {
+  id: string;
+  heading: string;
+  lede: string;
+  links: ResourceLink[];
+}
+
+const sections: ResourceSection[] = [
+  {
+    id: 'portland-homeowners',
+    heading: 'For Portland homeowners',
+    lede: 'Programs and references that make energy upgrades more accessible in the Portland metro area.',
+    links: [
+      {
+        title: 'Energy Trust of Oregon',
+        href: 'https://www.energytrust.org',
+        description: 'The main rebate program for Oregon homeowners — covers heat pumps, insulation, air sealing, and more. Start here to understand what your home qualifies for.',
+      },
+      {
+        title: 'PCEF — Portland Clean Energy Fund',
+        href: 'https://www.portland.gov/bps/cleanenergy',
+        description: 'City of Portland program that layers additional incentives on top of ETO rebates, especially for income-qualified households.',
+      },
+      {
+        title: 'Oregon Residential Energy Code (ORSC)',
+        href: 'https://www.oregon.gov/bcd/eng/Pages/building-codes.aspx',
+        description: 'The building code governing ventilation ratios, insulation minimums, and mechanical requirements for Oregon residential projects.',
+      },
+      {
+        title: 'Energy Friendly Homes (EFH) Program',
+        href: 'https://www.energytrust.org/programs/energy-friendly-homes/',
+        description: 'ETO\'s package-based program for comprehensive home performance upgrades — the framework Resilient Retrofits uses for most jobs.',
+      },
+    ],
+  },
+  {
+    id: 'building-with-claude',
+    heading: 'Building with Claude',
+    lede: 'Tools and documentation for the AI-assisted development workflow I use every day.',
+    links: [
+      {
+        title: 'Claude Code',
+        href: 'https://claude.ai/claude-code',
+        description: 'Anthropic\'s agentic coding tool — runs inside your terminal and handles the full implementation loop from scaffolding to debugging.',
+      },
+      {
+        title: 'Model Context Protocol (MCP) — Documentation',
+        href: 'https://modelcontextprotocol.io/introduction',
+        description: 'The open protocol for connecting AI models to external tools and data sources; powers my ServiceTitan, Firecrawl, and Dialpad integrations.',
+      },
+      {
+        title: 'Firecrawl',
+        href: 'https://www.firecrawl.dev',
+        description: 'Web scraping and crawling API with an MCP server — gets clean structured data out of messy web pages without fighting with headless browsers.',
+      },
+      {
+        title: 'Anthropic Developer Docs',
+        href: 'https://docs.anthropic.com',
+        description: 'API reference, prompt engineering guides, and tool-use documentation — the authoritative source when building production AI workflows.',
+      },
+    ],
+  },
+  {
+    id: 'web-scraping',
+    heading: 'Learning web scraping',
+    lede: 'Resources for picking up practical scraping skills, from beginner to production-ready.',
+    links: [
+      {
+        title: 'Scraping School',
+        href: '#',
+        description: 'My own practical course on web scraping — real projects, real anti-bot scenarios, no fluff. Modules are shipping progressively.',
+        badge: 'Coming soon',
+      },
+      {
+        title: 'Playwright — Python docs',
+        href: 'https://playwright.dev/python/docs/intro',
+        description: 'Microsoft\'s browser automation library; the right tool when a site renders data client-side and you can\'t just hit the API directly.',
+      },
+      {
+        title: 'BeautifulSoup 4 docs',
+        href: 'https://www.crummy.com/software/BeautifulSoup/bs4/doc/',
+        description: 'Simple HTML parsing library for Python — the fastest way to extract data from static pages once you have the HTML in hand.',
+      },
+      {
+        title: 'Crawlee for Python',
+        href: 'https://crawlee.dev/python',
+        description: 'Production-grade scraping framework with built-in request queuing, session management, and proxy rotation for large-scale crawls.',
+      },
+    ],
+  },
+  {
+    id: 'home-performance',
+    heading: 'Home performance',
+    lede: 'Industry standards and technical references for residential energy auditing and building science.',
+    links: [
+      {
+        title: 'BPI — Building Performance Institute',
+        href: 'https://www.bpi.org',
+        description: 'Sets the standards and certifications for home energy auditing, including the diagnostic protocols we follow on every assessment.',
+      },
+      {
+        title: 'Manual J Residential Load Calculation',
+        href: 'https://www.acca.org/manual-j',
+        description: 'ACCA\'s heating and cooling load calculation method — the industry standard for correctly sizing heat pump and HVAC equipment.',
+      },
+      {
+        title: 'Retrotec — Blower Door Resources',
+        href: 'https://retrotec.com/resources/',
+        description: 'Technical guides and calculators for air leakage testing, CFM50 interpretation, and building tightness standards.',
+      },
+      {
+        title: 'ENERGY STAR — Certified Homes Technical',
+        href: 'https://www.energystar.gov/new_homes_partners/technical_resources',
+        description: 'Technical specifications and checklists for energy-efficient construction — useful reference when scoping envelope improvements.',
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Resources — Energy Retrofits & Building Software"
+  description="Curated guides, tools, and references for homeowners tackling retrofits and engineers building contractor automation."
+>
+  <Fragment slot="structured-data">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://kylekanooth.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Resources", "item": "https://kylekanooth.com/resources/" }
+      ]
+    })} />
+  </Fragment>
+
+  <Nav />
+
+  <main id="main-content" class="pt-20 min-h-screen bg-[var(--c-bg)]">
+    <div class="max-w-6xl mx-auto px-5 md:px-8 py-20 md:py-28">
+
+      <!-- Header -->
+      <div class="max-w-2xl mb-16 reveal">
+        <span class="tag mb-4 inline-block">/resources</span>
+        <h1 class="font-display text-4xl md:text-5xl font-semibold text-[var(--c-text-pri)] mb-4 leading-tight">
+          Resources
+        </h1>
+        <p class="text-[var(--c-text-sec)] text-lg leading-relaxed">
+          Links I actually use and refer people to — energy programs, developer tools, scraping references, and building science standards.
+        </p>
+      </div>
+
+      <!-- Jump nav -->
+      <nav aria-label="Jump to section" class="mb-12 reveal" data-delay="1">
+        <ul class="flex flex-wrap gap-2" role="list">
+          {sections.map((s) => (
+            <li>
+              <a href={`#${s.id}`} class="tag text-sm transition-colors">
+                {s.heading}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <!-- Resource sections -->
+      <div class="space-y-16">
+        {sections.map((section, i) => (
+          <section id={section.id} aria-labelledby={`${section.id}-heading`} class="reveal" data-delay={String((i % 4) + 1)}>
+
+            <div class="mb-6">
+              <h2 id={`${section.id}-heading`} class="font-display text-2xl font-semibold text-[var(--c-text-pri)] mb-2 flex items-center gap-3">
+                <span class="w-2 h-2 rounded-full bg-[#6B8F5E] inline-block flex-shrink-0" aria-hidden="true"></span>
+                {section.heading}
+              </h2>
+              <p class="text-[var(--c-text-sec)] text-sm ml-5">{section.lede}</p>
+            </div>
+
+            <ul class="grid sm:grid-cols-2 gap-4" role="list">
+              {section.links.map((link) => (
+                <li>
+                  {link.href === '#' ? (
+                    <div class="rounded-xl border border-[var(--c-border)] bg-[var(--c-surface)] p-5 h-full opacity-70" aria-label={`${link.title} — ${link.badge ?? ''}`}>
+                      <div class="flex items-start justify-between gap-3 mb-2">
+                        <span class="font-semibold text-[var(--c-text-pri)] leading-snug">{link.title}</span>
+                        {link.badge && (
+                          <span class="flex-shrink-0 text-xs font-medium px-2 py-0.5 rounded-full bg-[rgba(217,119,6,0.12)] text-[#D97706] border border-[rgba(217,119,6,0.25)]">
+                            {link.badge}
+                          </span>
+                        )}
+                      </div>
+                      <p class="text-sm text-[var(--c-text-sec)] leading-relaxed">{link.description}</p>
+                    </div>
+                  ) : (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="group rounded-xl border border-[var(--c-border)] bg-[var(--c-surface)] p-5 h-full flex flex-col card-hover service-glow"
+                      aria-label={`${link.title} (opens in new tab)`}
+                    >
+                      <div class="flex items-start justify-between gap-3 mb-2">
+                        <span class="font-semibold text-[var(--c-text-pri)] leading-snug group-hover:text-[#6B8F5E] transition-colors">
+                          {link.title}
+                        </span>
+                        <svg
+                          aria-hidden="true"
+                          class="w-4 h-4 flex-shrink-0 mt-0.5 text-[var(--c-text-mut)] group-hover:text-[#6B8F5E] transition-colors"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+                          <polyline points="15 3 21 3 21 9"/>
+                          <line x1="10" y1="14" x2="21" y2="3"/>
+                        </svg>
+                      </div>
+                      <p class="text-sm text-[var(--c-text-sec)] leading-relaxed mt-auto">{link.description}</p>
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+
+          </section>
+        ))}
+      </div>
+
+      <!-- Footer note -->
+      <p class="mt-16 text-sm text-[var(--c-text-mut)] reveal">
+        Links are reviewed periodically. External sites are independent — inclusion is not a commercial endorsement.
+      </p>
+
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

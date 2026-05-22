@@ -12,9 +12,19 @@ function formatDate(date: Date): string {
 ---
 
 <BaseLayout
-  title="Blog — Kyle Kanooth"
-  description="Writing on automation, field service operations, and building software for the trades."
+  title="Blog — Automation, HVAC, and Building Software"
+  description="Notes on automating the trades, lessons running an HVAC business, and the software I build in between."
 >
+  <Fragment slot="structured-data">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://kylekanooth.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://kylekanooth.com/blog/" }
+      ]
+    })} />
+  </Fragment>
   <main id="main-content" class="min-h-screen bg-bg text-textPri">
     <!-- Nav -->
     <nav class="sticky top-0 z-50 border-b border-border bg-[var(--c-nav-bg)] backdrop-blur-md">
@@ -29,7 +39,7 @@ function formatDate(date: Date): string {
             class="theme-toggle"
             aria-label="Toggle color theme"
           >
-            <svg class="w-4 h-4 block dark-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
             </svg>
           </button>
@@ -39,7 +49,7 @@ function formatDate(date: Date): string {
 
     <!-- Header -->
     <header class="max-w-5xl mx-auto px-6 pt-16 pb-10">
-      <p class="text-cyan text-sm font-medium uppercase tracking-widest mb-3">Writing</p>
+      <p class="text-green text-sm font-medium uppercase tracking-widest mb-3">Writing</p>
       <h1 class="font-display text-4xl md:text-5xl font-bold text-textPri leading-tight mb-4">
         Blog
       </h1>
@@ -67,7 +77,7 @@ function formatDate(date: Date): string {
                 </div>
 
                 <!-- Title -->
-                <h2 class="font-display text-lg font-semibold text-textPri leading-snug mb-3 group-hover:text-cyan transition-colors">
+                <h2 class="font-display text-lg font-semibold text-textPri leading-snug mb-3 group-hover:text-green transition-colors">
                   {post.data.title}
                 </h2>
 
@@ -86,7 +96,7 @@ function formatDate(date: Date): string {
                 )}
 
                 <!-- Read more -->
-                <div class="mt-5 flex items-center gap-1 text-cyan text-sm font-medium">
+                <div class="mt-5 flex items-center gap-1 text-green text-sm font-medium">
                   Read more
                   <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
